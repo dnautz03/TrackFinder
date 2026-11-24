@@ -103,6 +103,12 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Entrances wait until their section is in view */
+.reveal-scope:not(.is-in) .line-rise,
+.reveal-scope:not(.is-in) .fade-up {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .line-rise, .fade-up { animation: none; }

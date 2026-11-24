@@ -122,8 +122,9 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
     }
 
     let raf = 0
-    let visible = true
-    let cycleStart = performance.now()
+    let visible = false
+    let started = false
+    let cycleStart = 0
     let pausedAt = 0
     let nextHit = 0
     const timers = new Set<number>()
@@ -177,7 +178,12 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
       const was = visible
       visible = e.isIntersecting
       if (visible && !was) {
-        cycleStart += performance.now() - pausedAt
+        if (!started) {
+          started = true
+          cycleStart = performance.now()
+        } else {
+          cycleStart += performance.now() - pausedAt
+        }
         raf = requestAnimationFrame(frame)
       } else if (!visible && was) {
         pausedAt = performance.now()
@@ -189,7 +195,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
     const ro = new ResizeObserver(() => layout())
     ro.observe(canvas)
 
-    raf = requestAnimationFrame(frame)
+    draw(0, 0)
     return () => {
       cancelAnimationFrame(raf)
       io.disconnect()

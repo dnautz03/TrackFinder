@@ -1,13 +1,34 @@
+import { useEffect, useRef, useState } from 'react'
 import { DOWNLOAD_URL, REPO_URL } from '../lib/links'
 import { GhostCta, PrimaryCta } from './Buttons'
 import { SendToComputer } from './SendToComputer'
 import { SignalDeck } from './SignalDeck'
 
 export function Hero() {
+  // Headline and buttons play their entrance when the hero scrolls into view.
+  const ref = useRef<HTMLElement>(null)
+  const [shown, setShown] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px -20% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <section
-      id="top"
-      className="hero-grid relative mx-auto max-w-[90rem] gap-x-14 px-5 pt-24 pb-16 sm:px-8 sm:pt-32 lg:px-12 lg:pt-36 lg:pb-24"
+      id="get"
+      ref={ref}
+      className={`reveal-scope hero-grid relative mx-auto max-w-[90rem] scroll-mt-16 gap-x-14 px-5 pt-10 pb-16 sm:px-8 sm:pt-24 lg:px-12 lg:pt-28 lg:pb-24 ${shown ? 'is-in' : ''}`}
     >
       <h1 className="hero-head type-display text-[clamp(2.9rem,11.6vw,6rem)] uppercase lg:text-[min(6rem,8vw)]">
         <span className="line-mask">

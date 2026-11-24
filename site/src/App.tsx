@@ -1,4 +1,5 @@
 import { Hero } from './components/Hero'
+import { IntroScroll } from './components/IntroScroll'
 import { Nav } from './components/Nav'
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
       </a>
       <Nav />
       <main id="main">
+        <IntroScroll />
         <Hero />
       </main>
     </>
