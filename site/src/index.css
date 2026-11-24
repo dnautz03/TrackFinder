@@ -1,0 +1,110 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/instrument-sans/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
+@import 'tailwindcss';
+
+/* ───────── Design tokens — Underground Signal ───────── */
+@theme {
+  --color-night: #0b0c0a;      /* page background */
+  --color-deck: #151713;       /* raised surface */
+  --color-groove: #24271f;     /* hairlines, unplayed waveform */
+  --color-dust: #8a9080;       /* secondary text */
+  --color-bone: #eceee4;       /* primary text */
+  --color-acid: #c8ff2e;       /* the one accent */
+  --color-acid-deep: #a8dc12;  /* accent pressed */
+
+  --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, sans-serif;
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-night);
+    color: var(--color-bone);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-acid);
+    color: var(--color-night);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-acid);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Display type: Archivo at its widest setting */
+.type-display {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+/* Headline lines rise out of a mask on first paint (CSS only, no JS wait) */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.line-rise {
+  display: block;
+  animation: rise 900ms var(--ease-out-expo) both;
+}
+@keyframes rise {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+.fade-up {
+  animation: fadeUp 700ms var(--ease-out-expo) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .line-rise, .fade-up { animation: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hero layout: on phones the waveform sits right under the headline so the
+   motion is above the fold; on desktop it docks beside "More mixing." */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'head' 'wave' 'copy' 'list';
+}
+.hero-head { grid-area: head; }
+.hero-wave { grid-area: wave; }
+.hero-copy { grid-area: copy; }
+.hero-list { grid-area: list; }
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: 'head wave' 'copy list';
+  }
+  .hero-wave { align-self: end; }
+}
