@@ -66,12 +66,15 @@ All fonts are self-hosted via Fontsource: no Google request, and only the Latin 
 | Reveal | 900ms | Headline lines rising from a mask |
 | Signal sweep | 13s sweep + 3.2s hold, then loops | Hero waveform |
 
-Page opening
-1. **Intro (scroll-driven).** A long set waveform scrolls past a fixed centre playhead, like a DJ deck. Page scroll moves it; the section is ~2 screens tall with sticky content, so there is no scroll hijacking. Captions change with progress: *Your favourite DJ.* → *Hundreds of sets.* → *One search.* A "Deck A" clock and "124 BPM" sit underneath. The nav CTA stays visible the whole time.
-2. **Hero.** *Less digging. More mixing.* and both buttons rise in once the hero enters the view. The SignalDeck loop (sets → clean list) starts from zero the first time it is seen, and loops constantly after that.
+Hero moments (adapted from the Provably component, in our palette)
+1. **Digging → mixing switch.** The hero loads in greyscale. A switch with a tiny spinning record stands in for the O in MORE. Click it, press M, or drag the knob: a lime-edged colour wave spreads from it across the hero. Left alone it flips on after 2.2s. The nav CTA sits outside the wave and stays lime the whole time.
+2. **Signal grid.** Hairline vertical grid with lime segments running down the lines (CSS only). On desktop, the lines nearest the pointer light up.
+3. **Kinetic headline.** Letters get heavier (800 → 900) as the mouse nears; widths are locked so nothing shifts.
+4. **Button sweep.** A light band crosses the CTAs on hover, plus the magnetic pull.
+5. **SignalDeck loop.** Sets turn into a clean list, constantly.
 
 Rules
-- **One authored moment per section.** In the intro it is the deck scroll; in the hero it is the sweep that turns sets into a list. No generic fade on every block.
+- **One authored moment per section.** In the hero that is the colour wave plus the sets-to-list loop. No generic fade on every block.
 - The headline and CTAs animate with CSS and are on screen in under 400ms. Nothing waits for JavaScript.
 - The canvas pauses when it is off screen or the tab is hidden. Its pixel ratio is capped at 2.
 - A subtle 124 BPM pulse plays just behind the playhead, so it feels like rhythm without any sound. Audio never plays.
