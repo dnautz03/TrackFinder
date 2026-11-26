@@ -20,14 +20,35 @@ npm run build:local
 npm run dev
 ```
 
-## Production build (GitHub Pages)
+## Deploy: Cloudflare Pages
+
+Cloudflare Pages project settings (repo `dnautz03/TrackFinder`):
+
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Framework preset | None |
+| Root directory | `site` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Environment variable | `SITE_URL` = `https://<project>.pages.dev` (or the custom domain) |
+
+Node 22 is picked up from `.nvmrc`. `public/_headers` sets long caching for hashed
+assets and basic security headers. Other branches get preview URLs automatically.
+
+`SITE_URL` adds the canonical URL, absolute share-image URLs and `sitemap.xml`.
+After adding a custom domain, update `SITE_URL` and redeploy.
+
+## Production build
 
 ```bash
 npm run build
 ```
 
-Output goes to `dist/`, served from `/TrackFinder/`. The build prerenders the page into `dist/index.html`.
+Output goes to `dist/`, served from the site root. The build prerenders the page into
+`dist/index.html`. For GitHub Pages instead, build with `BASE_PATH=/TrackFinder/`.
 
-Fonts in `src/fonts/` are trimmed copies; regenerate them with `scripts/fonts.sh` (needs `pip install fonttools brotli`). For a custom domain, build with `BASE_PATH=/`.
+Fonts in `src/fonts/` are trimmed copies; regenerate them with `scripts/fonts.sh`
+(needs `pip install fonttools brotli`). The share image is `public/og.png` (1200 × 630).
 
 Design rules live in [DESIGN.md](DESIGN.md).

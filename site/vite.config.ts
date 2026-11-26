@@ -1,10 +1,23 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import { fileURLToPath, URL } from 'node:url'
 
 const alias = { '@': fileURLToPath(new URL('./src', import.meta.url)) }
+
+/**
+ * Hosting:
+ * - Cloudflare Pages (default): site served from the root, base "/".
+ * - GitHub Pages: build with BASE_PATH=/TrackFinder/.
+ * SITE_URL (e.g. https://trackfinder.pages.dev) turns on canonical/og:url,
+ * absolute share-image URLs and sitemap.xml. Set it in the host's build settings.
+ */
+const base = process.env.BASE_PATH ?? '/'
+const siteUrl = process.env.SITE_URL?.replace(/\/+$/, '')
+
+const TITLE = 'TrackFinder — Less Digging. More Mixing.'
+const SHARE_DESCRIPTION = 'Discover the tracks your favourite DJs play. Free for Windows and macOS.'
 
 // Preload the display font so the hero headline paints in its real face sooner.
 function preloadDisplayFont(): Plugin {
@@ -26,7 +39,48 @@ function preloadDisplayFont(): Plugin {
     },
   }
 }
-const base = process.env.BASE_PATH ?? '/TrackFinder/'
+
+// Social sharing tags, robots.txt and (with SITE_URL) canonical + sitemap.xml.
+function seo(): Plugin {
+  const abs = (path: string) => (siteUrl ? `${siteUrl}${base}${path}` : `${base}${path}`)
+  return {
+    name: 'seo',
+    transformIndexHtml() {
+      const meta = (attrs: Record<string, string>): HtmlTagDescriptor => ({ tag: 'meta', attrs, injectTo: 'head' })
+      const tags: HtmlTagDescriptor[] = [
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }, injectTo: 'head' },
+        meta({ property: 'og:type', content: 'website' }),
+        meta({ property: 'og:site_name', content: 'TrackFinder' }),
+        meta({ property: 'og:title', content: TITLE }),
+        meta({ property: 'og:description', content: SHARE_DESCRIPTION }),
+        meta({ property: 'og:image', content: abs('og.png') }),
+        meta({ property: 'og:image:width', content: '1200' }),
+        meta({ property: 'og:image:height', content: '630' }),
+        meta({ property: 'og:image:alt', content: 'TrackFinder: Less digging. More mixing.' }),
+        meta({ name: 'twitter:card', content: 'summary_large_image' }),
+        meta({ name: 'twitter:title', content: TITLE }),
+        meta({ name: 'twitter:description', content: SHARE_DESCRIPTION }),
+        meta({ name: 'twitter:image', content: abs('og.png') }),
+      ]
+      if (siteUrl) {
+        tags.push({ tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${base}` }, injectTo: 'head' })
+        tags.push(meta({ property: 'og:url', content: `${siteUrl}${base}` }))
+      }
+      return tags
+    },
+    generateBundle() {
+      const robots = ['User-agent: *', 'Allow: /', ...(siteUrl ? [`Sitemap: ${siteUrl}${base}sitemap.xml`] : [])]
+      this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots.join('\n') + '\n' })
+      if (siteUrl) {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'sitemap.xml',
+          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc></url>\n</urlset>\n`,
+        })
+      }
+    },
+  }
+}
 
 export default defineConfig(({ mode }) => {
   // `npm run build:local` → one self-contained preview/index.html
@@ -34,16 +88,15 @@ export default defineConfig(({ mode }) => {
   if (mode === 'standalone') {
     return {
       base: './',
+      publicDir: false,
       resolve: { alias },
       plugins: [react(), tailwindcss(), viteSingleFile()],
       build: { outDir: 'preview', emptyOutDir: true },
     }
   }
-  // GitHub Pages serves the site from /TrackFinder/.
-  // Set BASE_PATH=/ when a custom domain is configured.
   return {
     base,
     resolve: { alias },
-    plugins: [react(), tailwindcss(), preloadDisplayFont()],
+    plugins: [react(), tailwindcss(), preloadDisplayFont(), seo()],
   }
 })
