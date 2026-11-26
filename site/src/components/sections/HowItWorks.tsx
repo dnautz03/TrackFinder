@@ -18,53 +18,72 @@ function useLoop(active: boolean, ms: number, steps: number) {
   return i
 }
 
-const NAMES = ['Your favourite DJ', 'Mira Kessel', 'Kaelo', 'Juno Raas']
+const NAMES = ['Mira Kessel', 'Kaelo', 'Juno Raas', 'Talen Roux']
+type Phase = 'typing' | 'hold' | 'press' | 'done' | 'clear'
 
+/**
+ * A search field that types a DJ name letter by letter (each letter eases in),
+ * presses "Find tracks", then fades the name away and types the next one.
+ */
 function TypeDj({ active }: { active: boolean }) {
   const reduced = useReducedMotion()
-  const [text, setText] = useState('')
+  const [n, setN] = useState(0)
+  const [count, setCount] = useState(0)
+  const [phase, setPhase] = useState<Phase>('typing')
+
   useEffect(() => {
     if (reduced) {
-      setText(NAMES[0])
+      setCount(NAMES[0].length)
+      setPhase('done')
       return
     }
     if (!active) return
-    let n = 0
-    let pos = 0
-    let deleting = false
-    let t = 0
-    const step = () => {
-      const word = NAMES[n]
-      if (!deleting) {
-        pos++
-        setText(word.slice(0, pos))
-        if (pos === word.length) {
-          deleting = true
-          t = window.setTimeout(step, 1400)
-          return
-        }
-        t = window.setTimeout(step, 70)
-      } else {
-        pos--
-        setText(word.slice(0, pos))
-        if (pos === 0) {
-          deleting = false
-          n = (n + 1) % NAMES.length
-          t = window.setTimeout(step, 300)
-          return
-        }
-        t = window.setTimeout(step, 32)
-      }
+    const name = NAMES[n]
+    const wait = (ms: number, fn: () => void) => {
+      const t = window.setTimeout(fn, ms)
+      return () => window.clearTimeout(t)
     }
-    t = window.setTimeout(step, 400)
-    return () => window.clearTimeout(t)
-  }, [active, reduced])
+    if (phase === 'typing') {
+      if (count < name.length) return wait(count === 0 ? 450 : 95, () => setCount((c) => c + 1))
+      return wait(450, () => setPhase('press'))
+    }
+    if (phase === 'press') return wait(420, () => setPhase('done'))
+    if (phase === 'done') return wait(1500, () => setPhase('clear'))
+    if (phase === 'clear')
+      return wait(380, () => {
+        setN((v) => (v + 1) % NAMES.length)
+        setCount(0)
+        setPhase('typing')
+      })
+  }, [active, reduced, n, count, phase])
 
+  const name = NAMES[n]
+  const empty = count === 0
   return (
-    <div className="flex h-14 w-full items-center gap-3 rounded-full border border-groove bg-night px-5">
+    <div className="flex h-14 w-full items-center gap-2 rounded-full border border-groove bg-night pr-1.5 pl-5">
       <Search className="size-4 shrink-0 text-dust" strokeWidth={2} />
-      <span className="truncate text-[1.0625rem] text-bone">{text}</span>
-      <span className="-ml-2 h-5 w-[2px] shrink-0 animate-pulse bg-acid" />
+      <span className="relative flex min-w-0 flex-1 items-center overflow-hidden pl-1 text-[1.0625rem]">
+        {empty && <span className="absolute left-[9px] text-[#5c6253]">Search a DJ…</span>}
+        <span
+          className={`flex items-center whitespace-pre text-bone transition-[opacity,transform,filter] duration-300 ease-out-expo ${
+            phase === 'clear' ? '-translate-y-2 opacity-0 blur-[3px]' : ''
+          }`}
+        >
+          {[...name.slice(0, count)].map((ch, i) => (
+            <span key={`${n}-${i}`} className="type-char">
+              {ch}
+            </span>
+          ))}
+          <span className={`type-caret ml-[2px] h-5 w-[2px] bg-acid ${phase === 'typing' ? 'is-typing' : ''}`} />
+        </span>
+      </span>
+      <span
+        className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,scale] duration-200 ${
+          phase === 'press' ? 'scale-95 bg-acid text-night' : phase === 'done' ? 'bg-acid text-night' : 'bg-deck text-dust'
+        }`}
+      >
+        Find tracks
+      </span>
     </div>
   )
 }

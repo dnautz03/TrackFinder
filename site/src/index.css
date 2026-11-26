@@ -207,8 +207,10 @@
   display: inline-block;
   width: 1.6em;
   height: 0.7em;
-  margin: 0 0.06em;
-  vertical-align: baseline;
+  /* optically centred in the O slot: R has a wider left bearing than M has on
+     its right, and the caps sit a hair lower than the box's baseline */
+  margin: 0 0.045em 0 0.075em;
+  vertical-align: -0.018em;
   border-radius: 999px;
   cursor: pointer;
   touch-action: pan-y;
@@ -397,3 +399,19 @@
 }
 /* Fixed page grid: isolate it so its animations never trigger page repaints */
 .sg-root { contain: strict; }
+
+/* How it works: typed DJ name — each letter eases in, caret blinks when idle */
+.type-char {
+  display: inline-block;
+  animation: typeIn 260ms var(--ease-out-expo) both;
+}
+@keyframes typeIn {
+  from { opacity: 0; transform: translateY(0.35em); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.type-caret { display: inline-block; animation: caret 1s steps(1) infinite; }
+.type-caret.is-typing { animation: none; }
+@keyframes caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .type-char, .type-caret { animation: none; }
+}
