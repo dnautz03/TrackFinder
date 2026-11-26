@@ -5,7 +5,7 @@ import { AppleMark, WindowsMark, primaryClass, useMagnet } from './Buttons'
 
 /**
  * The main call to action, adapted to the visitor's platform:
- *   Windows / macOS → the install guide, which starts that zip's download,
+ *   Windows / macOS → the install guide, which starts that file's download,
  *   phone/tablet → "Send the link to your computer", anything else → the guide.
  * All four variants are in the markup; an inline script in index.html sets
  * <html data-platform> before first paint and CSS shows the matching one, so

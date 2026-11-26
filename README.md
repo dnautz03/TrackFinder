@@ -18,27 +18,32 @@ Go to **[Releases](../../releases/latest)** and download the file for your compu
 
 | Computer | File | Needs |
 |---|---|---|
-| Windows | **[Underset-Windows.zip](../../releases/latest/download/Underset-Windows.zip)** | Windows 10 (1809 or newer) or Windows 11 |
-| Mac | **[Underset-macOS.zip](../../releases/latest/download/Underset-macOS.zip)** | macOS 14 Sonoma or newer, Apple Silicon (M1–M4) or Intel |
+| Windows | **[Underset-Setup.exe](../../releases/latest/download/Underset-Setup.exe)** | Windows 10 (1809 or newer) or Windows 11 |
+| Mac | **[Underset-macOS.dmg](../../releases/latest/download/Underset-macOS.dmg)** | macOS 14 Sonoma or newer, Apple Silicon (M1–M4) or Intel |
+
+Each release lists the SHA-256 fingerprint of both files, so you can check your download
+was not changed.
 
 ---
 
 ## Windows
 
-1. Right-click `Underset-Windows.zip` → **Extract All** → **Extract**.
-2. Open the `Underset` folder and double-click **Underset.exe**. Nothing else to install.
-3. The first time, Windows may show **"Windows protected your PC"**.
-   Click **More info** → **Run anyway**. You only need to do this once.
+1. Double-click `Underset-Setup.exe`.
+2. The first time, Windows may show **"Windows protected your PC"**.
+   Click **More info** → **Run anyway**. Windows shows this for every new app without a paid
+   certificate. It does not mean a virus was found.
+3. Accept the terms and follow the installer. It needs no administrator password.
+4. Open Underset from the Start menu.
 
-Tip: right-click `Underset.exe` → **Send to** → **Desktop (create shortcut)**.
+To remove it: **Settings** → **Apps** → **Underset** → **Uninstall**.
 
 ---
 
 ## Mac
 
-1. Double-click `Underset-macOS.zip`. You get **Underset.app**.
-2. Drag **Underset.app** into your **Applications** folder.
-3. Double-click Underset.
+1. Double-click `Underset-macOS.dmg` and accept the terms.
+2. Drag **Underset** into your **Applications** folder.
+3. Open Underset from **Applications**.
 
 ### "Apple could not verify Underset is free of malware"
 
@@ -69,6 +74,9 @@ Underset tells you it needs to download its components (Python and the window
 libraries): about **0.5 GB** to download, **1.5 GB** on disk. It asks before doing anything.
 Click **Install** and wait a few minutes; the app then opens by itself. This happens only once,
 needs no administrator password and changes nothing else on your Mac.
+
+If you used Underset when it was called TrackFinder, your settings, cache and installed
+components carry over automatically, so there is no new download.
 
 ---
 

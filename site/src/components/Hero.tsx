@@ -20,10 +20,8 @@ function HeroStage() {
       <div className="mix-panel relative overflow-clip">
         <section className="hero-grid relative mx-auto max-w-[90rem] gap-x-14 px-5 pt-24 pb-16 sm:px-8 sm:pt-32 lg:px-12 lg:pt-36 lg:pb-24">
           <h1 className="hero-head type-display text-[clamp(2.9rem,11.6vw,6rem)] uppercase lg:text-[min(6rem,8vw)]">
-            {/* Brand + what it is, so search engines read "Underset, DJ tracklist finder" in the h1 */}
-            <span className="fade-up mb-5 block font-mono text-[0.75rem] font-normal tracking-[0.08em] text-dust normal-case sm:mb-7 sm:text-[0.8125rem]">
-              Underset · free DJ tracklist finder
-            </span>
+            {/* Brand + what it is, hidden visually but kept so search engines read it in the h1 */}
+            <span className="sr-only">Underset · free DJ tracklist finder</span>
             <span className="sr-only">Less digging. More mixing.</span>
             <span className="line-in">
               <span className="plate">

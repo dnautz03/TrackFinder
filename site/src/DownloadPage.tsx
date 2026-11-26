@@ -3,11 +3,11 @@ import { ArrowDownToLine, ArrowLeft, Check, Copy, ShieldCheck, TriangleAlert } f
 import { AppleMark, GithubMark, WindowsMark, primaryClass } from '@/components/Buttons'
 import { Wordmark } from '@/components/Nav'
 import { Footer } from '@/components/sections/Footer'
-import { DOWNLOAD_URL, HOME_URL, REPO_URL, ZIP, type Os } from '@/lib/links'
+import { DOWNLOAD_URL, HOME_URL, REPO_URL, FILE, type Os } from '@/lib/links'
 
 /**
  * /download/ — opened by every download button.
- * ?os=windows|mac picks the guide, &start=1 also starts that zip's download.
+ * ?os=windows|mac picks the guide, &start=1 also starts that file's download.
  * Before first paint an inline script in download/index.html sets <html data-os>
  * (from ?os, else from the platform), and CSS shows the matching guide, so the
  * prerendered page is already right without JavaScript.
@@ -33,7 +33,7 @@ export default function DownloadPage() {
       params.delete('start')
       history.replaceState(null, '', `${window.location.pathname}?${params}`)
       setStarted(want)
-      const t = window.setTimeout(() => window.location.assign(ZIP[want]), 600)
+      const t = window.setTimeout(() => window.location.assign(FILE[want]), 600)
       return () => window.clearTimeout(t)
     }
   }, [])
@@ -92,13 +92,13 @@ export default function DownloadPage() {
                   : 'Pick your computer:'}
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-                <a href={ZIP.windows} className={primaryClass('sm')}>
+                <a href={FILE.windows} className={primaryClass('sm')}>
                   <WindowsMark className="size-4" />
-                  Windows (.zip)
+                  Windows (.exe)
                 </a>
-                <a href={ZIP.mac} className={primaryClass('sm')}>
+                <a href={FILE.mac} className={primaryClass('sm')}>
                   <AppleMark className="-mt-0.5 size-4" />
-                  macOS (.zip)
+                  macOS (.dmg)
                 </a>
               </div>
               <a
@@ -173,31 +173,30 @@ export default function DownloadPage() {
 function WindowsGuide() {
   return (
     <ol className="grid gap-14">
-      <Step n={1} title="Unzip the file">
-        In your <b>Downloads</b> folder, right-click <Code>Underset-Windows.zip</Code> → <b>Extract All</b> →{' '}
-        <b>Extract</b>. Don’t open the app from inside the zip: it won’t work properly there.
-      </Step>
-      <Step n={2} title="Open Underset">
-        Open the new <Code>Underset</Code> folder and double-click <b>Underset.exe</b>. Nothing else to install.
+      <Step n={1} title="Open the installer">
+        In your <b>Downloads</b> folder, double-click <Code>Underset-Setup.exe</Code>.
       </Step>
       <Step
-        n={3}
+        n={2}
         title="“Windows protected your PC” → More info"
         mock={<WinSmartScreen />}
       >
         A blue window appears. There is no “Run” button yet. Don’t click “Don’t run”. Click the small{' '}
         <b>More info</b> link instead.
       </Step>
-      <Step n={4} title="Click “Run anyway”" mock={<WinSmartScreen expanded />}>
+      <Step n={3} title="Click “Run anyway”" mock={<WinSmartScreen expanded />}>
         The window now shows <i>Publisher: Unknown publisher</i> and a new <b>Run anyway</b> button. Click it.
-        Underset opens.
+        The installer opens.
+      </Step>
+      <Step n={4} title="Install Underset">
+        Accept the terms and follow the installer. It needs no administrator password.
       </Step>
       <Step n={5} title="Done. Only this once." last>
-        Next time Underset opens with a normal double-click. Tip: right-click <b>Underset.exe</b> → <b>Send to</b> →{' '}
-        <b>Desktop (create shortcut)</b>.
+        Open Underset from the <b>Start menu</b>. The warning doesn’t come back. To remove it later:{' '}
+        <b>Settings</b> → <b>Apps</b> → <b>Underset</b> → <b>Uninstall</b>.
         <Help title="No “More info” link, or the file disappeared?">
           Some antivirus apps block or delete new apps they don’t know yet. Open your antivirus, find Underset in its
-          quarantine or blocked list, and choose <b>Restore</b> or <b>Allow</b>. Then try again from step 2.
+          quarantine or blocked list, and choose <b>Restore</b> or <b>Allow</b>. Then try again from step 1.
         </Help>
       </Step>
     </ol>
@@ -207,9 +206,10 @@ function WindowsGuide() {
 function MacGuide() {
   return (
     <ol className="grid gap-14">
-      <Step n={1} title="Unzip and move it to Applications">
-        In your <b>Downloads</b> folder, double-click <Code>Underset-macOS.zip</Code>. You get <b>Underset.app</b>.
-        Drag it into your <b>Applications</b> folder, then double-click it there. Needs macOS 14 Sonoma or newer.
+      <Step n={1} title="Open the disk image, move it to Applications">
+        In your <b>Downloads</b> folder, double-click <Code>Underset-macOS.dmg</Code> and accept the terms. Drag{' '}
+        <b>Underset</b> into your <b>Applications</b> folder, then double-click it there. Needs macOS 14 Sonoma or
+        newer.
       </Step>
       <Step n={2} title="Warning → click “Done”" mock={<MacAlert />}>
         macOS says <i>Apple could not verify “Underset” is free of malware</i>. Click <b>Done</b>.{' '}
@@ -225,7 +225,8 @@ function MacGuide() {
       <Step n={5} title="First start: let it set itself up" last>
         Underset asks to download its components (Python and the window libraries): about <b>0.5 GB</b> to download,{' '}
         <b>1.5 GB</b> on disk. Click <b>Install</b> and wait a few minutes. It happens only once, needs no admin
-        password, and opens the app by itself when it’s done.
+        password, and opens the app by itself when it’s done. Used it when it was called TrackFinder? Your components
+        are reused, so there’s nothing new to download.
         <Help title="It says “Underset is damaged and can’t be opened”">
           <span className="block">
             The app isn’t broken: macOS just marked the download. Open the <b>Terminal</b> app (press ⌘ Space and type
@@ -355,7 +356,7 @@ function WinSmartScreen({ expanded = false }: { expanded?: boolean }) {
       </p>
       {expanded ? (
         <p className="mt-3 text-sm leading-relaxed">
-          App: Underset.exe
+          App: Underset-Setup.exe
           <br />
           Publisher: Unknown publisher
         </p>
