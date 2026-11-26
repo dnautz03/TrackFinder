@@ -235,7 +235,10 @@ export function MixSwitch({ autoplayAfter = 2.2 }: { autoplayAfter?: number }) {
   }
 
   return (
-    <span className="relative inline-block">
+    // The slot is an empty inline-block span, whose baseline is its bottom edge in
+    // every browser; an empty <button> has no reliable baseline (Safari/Firefox
+    // drop it below the text). The button just fills the slot.
+    <span className="mix-slot">
       <button
         ref={switchRef}
         type="button"

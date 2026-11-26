@@ -201,16 +201,26 @@
 .kt[data-locked='true'] .kt-char { display: inline-block; text-align: center; }
 
 /* ───────── Mix switch: stands in for the O in MORE ───────── */
-.mix-switch {
-  --knob-x: 0em;
+.mix-slot {
   position: relative;
   display: inline-block;
   width: 1.6em;
   height: 0.7em;
   /* optically centred in the O slot: R has a wider left bearing than M has on
-     its right, and the caps sit a hair lower than the box's baseline */
+     its right; bottom edge sits on the baseline, top at cap height */
   margin: 0 0.045em 0 0.075em;
   vertical-align: -0.018em;
+}
+.mix-switch {
+  --knob-x: 0em;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
   border-radius: 999px;
   cursor: pointer;
   touch-action: pan-y;
