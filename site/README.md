@@ -20,21 +20,22 @@ npm run build:local
 npm run dev
 ```
 
-## Deploy: Cloudflare Pages
+## Deploy: Cloudflare (Workers Builds, static assets)
 
-Cloudflare Pages project settings (repo `dnautz03/TrackFinder`):
+Connect the repo `dnautz03/TrackFinder` in Cloudflare → Workers & Pages → Create → Import a repository.
 
 | Setting | Value |
 |---|---|
-| Production branch | `main` |
-| Framework preset | None |
-| Root directory | `site` |
+| Project name | `trackfinder` |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
-| Environment variable | `SITE_URL` = `https://<project>.pages.dev` (or the custom domain) |
+| Deploy command | `npx wrangler deploy` (default) |
+| Non-production branch deploy command | default |
+| Root directory / Path (advanced) | `site` |
+| Build variable (optional, recommended) | `SITE_URL` = the live URL, e.g. `https://trackfinder.<account>.workers.dev` |
 
-Node 22 is picked up from `.nvmrc`. `public/_headers` sets long caching for hashed
-assets and basic security headers. Other branches get preview URLs automatically.
+`wrangler.jsonc` tells Cloudflare to serve `dist/` as static assets (no server code).
+Node 22 comes from `.nvmrc`. `public/_headers` sets long caching for hashed assets and
+basic security headers. Branches other than `main` get preview URLs.
 
 `SITE_URL` adds the canonical URL, absolute share-image URLs and `sitemap.xml`.
 After adding a custom domain, update `SITE_URL` and redeploy.
