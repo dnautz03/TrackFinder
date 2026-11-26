@@ -10,11 +10,12 @@ const alias = { '@': fileURLToPath(new URL('./src', import.meta.url)) }
  * Hosting:
  * - Cloudflare Pages (default): site served from the root, base "/".
  * - GitHub Pages: build with BASE_PATH=/TrackFinder/.
- * SITE_URL (e.g. https://trackfinder.pages.dev) turns on canonical/og:url,
- * absolute share-image URLs and sitemap.xml. Set it in the host's build settings.
+ * SITE_URL sets the public address used for canonical/og:url, absolute
+ * share-image URLs and sitemap.xml (defaults to the workers.dev address).
  */
 const base = process.env.BASE_PATH ?? '/'
-const siteUrl = process.env.SITE_URL?.replace(/\/+$/, '')
+// Live address; override with SITE_URL (e.g. after adding a custom domain).
+const siteUrl = (process.env.SITE_URL ?? 'https://trackfinder.dnautz.workers.dev').replace(/\/+$/, '')
 
 const TITLE = 'TrackFinder — Less Digging. More Mixing.'
 const SHARE_DESCRIPTION = 'Discover the tracks your favourite DJs play. Free for Windows and macOS.'

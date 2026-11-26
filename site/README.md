@@ -31,7 +31,7 @@ Connect the repo `dnautz03/TrackFinder` in Cloudflare → Workers & Pages → Cr
 | Deploy command | `npx wrangler deploy` (default) |
 | Non-production branch deploy command | default |
 | Root directory / Path (advanced) | `site` |
-| Build variable (optional, recommended) | `SITE_URL` = the live URL, e.g. `https://trackfinder.<account>.workers.dev` |
+| Build variable (optional) | `SITE_URL` — only needed to override the default `https://trackfinder.dnautz.workers.dev` |
 
 `wrangler.jsonc` tells Cloudflare to serve `dist/` as static assets (no server code).
 Node 22 comes from `.nvmrc`. `public/_headers` sets long caching for hashed assets and
