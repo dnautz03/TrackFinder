@@ -8,6 +8,8 @@ Free desktop app for **Windows** and **macOS**.
 
 **Website:** https://underset.dnautz.workers.dev
 
+![Underset: type a DJ, pick a period, get every track](images/demo.gif)
+
 ---
 
 ## Download
@@ -80,6 +82,10 @@ needs no administrator password and changes nothing else on your Mac.
    **Save list** to get a `.txt` with one *Artist – Title* per line.
 
 Turn on **Include IDs and unreleased** on the first page if you want those too.
+
+| 1. Pick the artist and period | 2. Underset reads the sets | 3. Every track, ready to save |
+|---|---|---|
+| ![Search](images/1-search.png) | ![Reading](images/2-reading.png) | ![Results](images/3-results.png) |
 
 ---
 
