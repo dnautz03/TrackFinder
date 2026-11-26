@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { DownloadCta } from './DownloadCta'
 
 /** Placeholder wordmark until the real Underset logo arrives. */
-export function Wordmark() {
+export function Wordmark({ href = '#top' }: { href?: string }) {
   return (
-    <a href="#top" className="inline-flex items-center gap-2.5" aria-label="Underset, back to top">
+    <a href={href} className="inline-flex items-center gap-2.5" aria-label={href === '#top' ? 'Underset, back to top' : 'Underset home'}>
       <svg viewBox="0 0 20 20" className="size-5 text-acid" aria-hidden fill="currentColor">
         <rect x="1" y="7" width="3" height="6" rx="1" />
         <rect x="6" y="3" width="3" height="14" rx="1" />

@@ -1,7 +1,8 @@
 import { renderToString } from 'react-dom/server'
 import App from './App'
+import DownloadPage from './DownloadPage'
 
-/** Used at build time to prerender the page into dist/index.html. */
-export function render() {
-  return renderToString(<App />)
+/** Used at build time to prerender each page into its HTML file. */
+export function render(page = 'home') {
+  return renderToString(page === 'download' ? <DownloadPage /> : <App />)
 }

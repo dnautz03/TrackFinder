@@ -19,6 +19,12 @@ const base = process.env.BASE_PATH ?? '/'
 const siteUrl = (process.env.SITE_URL ?? 'https://underset.dnautz.workers.dev').replace(/\/+$/, '')
 
 const TITLE = 'Underset — Less Digging. More Mixing.'
+const GUIDE_TITLE = 'Install Underset — Windows & macOS guide'
+const GUIDE_DESCRIPTION = 'What the Windows and macOS warnings mean, and how to open Underset in a minute.'
+const pages = {
+  main: fileURLToPath(new URL('./index.html', import.meta.url)),
+  download: fileURLToPath(new URL('./download/index.html', import.meta.url)),
+}
 const SHARE_DESCRIPTION = 'Discover the tracks your favourite DJs play. Free for Windows and macOS.'
 
 // Preload the display font so the hero headline paints in its real face sooner.
@@ -47,21 +53,25 @@ function seo(): Plugin {
   const abs = (path: string) => (siteUrl ? `${siteUrl}${base}${path}` : `${base}${path}`)
   return {
     name: 'seo',
-    transformIndexHtml() {
+    transformIndexHtml(_html, ctx) {
+      const guide = ctx.path.includes('download')
+      const path = guide ? 'download/' : ''
+      const title = guide ? GUIDE_TITLE : TITLE
+      const description = guide ? GUIDE_DESCRIPTION : SHARE_DESCRIPTION
       const meta = (attrs: Record<string, string>): HtmlTagDescriptor => ({ tag: 'meta', attrs, injectTo: 'head' })
       const tags: HtmlTagDescriptor[] = [
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }, injectTo: 'head' },
         meta({ property: 'og:type', content: 'website' }),
         meta({ property: 'og:site_name', content: 'Underset' }),
-        meta({ property: 'og:title', content: TITLE }),
-        meta({ property: 'og:description', content: SHARE_DESCRIPTION }),
+        meta({ property: 'og:title', content: title }),
+        meta({ property: 'og:description', content: description }),
         meta({ property: 'og:image', content: abs('og.png') }),
         meta({ property: 'og:image:width', content: '1200' }),
         meta({ property: 'og:image:height', content: '630' }),
         meta({ property: 'og:image:alt', content: 'Underset: Less digging. More mixing.' }),
         meta({ name: 'twitter:card', content: 'summary_large_image' }),
-        meta({ name: 'twitter:title', content: TITLE }),
-        meta({ name: 'twitter:description', content: SHARE_DESCRIPTION }),
+        meta({ name: 'twitter:title', content: title }),
+        meta({ name: 'twitter:description', content: description }),
         meta({ name: 'twitter:image', content: abs('og.png') }),
       ]
       // Structured data: what the app is (no ratings: we don't invent any) + the FAQ
@@ -84,12 +94,13 @@ function seo(): Plugin {
         '@type': 'FAQPage',
         mainEntity: FAQ.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
       }
-      for (const data of [app, faq]) {
+      // The app + FAQ data belongs to the home page only
+      for (const data of guide ? [] : [app, faq]) {
         tags.push({ tag: 'script', attrs: { type: 'application/ld+json' }, children: JSON.stringify(data), injectTo: 'head' })
       }
       if (siteUrl) {
-        tags.push({ tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${base}` }, injectTo: 'head' })
-        tags.push(meta({ property: 'og:url', content: `${siteUrl}${base}` }))
+        tags.push({ tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${base}${path}` }, injectTo: 'head' })
+        tags.push(meta({ property: 'og:url', content: `${siteUrl}${base}${path}` }))
       }
       return tags
     },
@@ -100,7 +111,7 @@ function seo(): Plugin {
         this.emitFile({
           type: 'asset',
           fileName: 'sitemap.xml',
-          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc></url>\n</urlset>\n`,
+          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc></url>\n  <url><loc>${siteUrl}${base}download/</loc></url>\n</urlset>\n`,
         })
       }
     },
@@ -123,5 +134,6 @@ export default defineConfig(({ mode }) => {
     base,
     resolve: { alias },
     plugins: [react(), tailwindcss(), preloadDisplayFont(), seo()],
+    build: { rollupOptions: { input: pages } },
   }
 })

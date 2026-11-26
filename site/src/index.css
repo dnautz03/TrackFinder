@@ -522,3 +522,14 @@ html:not(.js-ready) .sk-only { display: grid; }
   animation: skShimmer 1.4s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) { .sk, .sk-canvas { animation: none !important; } }
+
+/* Install guide: <html data-os> is set before first paint, so the right guide shows without JS */
+.os-panel { display: none; }
+html:not([data-os]) .os-windows,
+html[data-os='windows'] .os-windows,
+html[data-os='mac'] .os-mac { display: block; }
+.os-tab { color: var(--color-dust); }
+.os-tab:hover { color: var(--color-bone); }
+html:not([data-os]) .os-tab-windows,
+html[data-os='windows'] .os-tab-windows,
+html[data-os='mac'] .os-tab-mac { background: var(--color-acid); color: var(--color-night); }

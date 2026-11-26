@@ -16,5 +16,6 @@
 - License: freeware; the app is not open source.
 
 ## Links
+- Install guide (Windows SmartScreen and macOS security warnings): https://underset.dnautz.workers.dev/download/
 - Download (latest release): https://github.com/dnautz03/Underset/releases/latest
 - Source page and instructions: https://github.com/dnautz03/Underset

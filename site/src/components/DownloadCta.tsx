@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { ArrowDownToLine, ArrowUpRight, Laptop } from 'lucide-react'
-import { DOWNLOAD_URL, MAC_ZIP, WINDOWS_ZIP } from '@/lib/links'
+import { guideUrl } from '@/lib/links'
 import { AppleMark, WindowsMark, primaryClass, useMagnet } from './Buttons'
 
 /**
  * The main call to action, adapted to the visitor's platform:
- *   Windows → direct download of the Windows zip, macOS → the macOS zip,
- *   phone/tablet → "Send the link to your computer", anything else → GitHub releases.
+ *   Windows / macOS → the install guide, which starts that zip's download,
+ *   phone/tablet → "Send the link to your computer", anything else → the guide.
  * All four variants are in the markup; an inline script in index.html sets
  * <html data-platform> before first paint and CSS shows the matching one, so
  * nothing flickers or shifts and the prerendered HTML stays valid.
@@ -48,12 +48,12 @@ export function DownloadCta({ size = 'lg' }: { size?: Size }) {
 
   return (
     <>
-      <a {...win} href={WINDOWS_ZIP} className={`cta-v cta-windows ${primaryClass(size)}`}>
+      <a {...win} href={guideUrl('windows')} className={`cta-v cta-windows ${primaryClass(size)}`}>
         <WindowsMark className={icon} />
         {lg ? 'Download for Windows — Free' : 'Download'}
         <ArrowDownToLine aria-hidden className={`${arrow} group-hover:translate-y-0.5`} strokeWidth={2.25} />
       </a>
-      <a {...mac} href={MAC_ZIP} className={`cta-v cta-mac ${primaryClass(size)}`}>
+      <a {...mac} href={guideUrl('mac')} className={`cta-v cta-mac ${primaryClass(size)}`}>
         <AppleMark className={`${icon} -mt-0.5`} />
         {lg ? 'Download for macOS — Free' : 'Download'}
         <ArrowDownToLine aria-hidden className={`${arrow} group-hover:translate-y-0.5`} strokeWidth={2.25} />
@@ -64,7 +64,7 @@ export function DownloadCta({ size = 'lg' }: { size?: Size }) {
           {state === 'copied' ? 'Link copied' : lg ? 'Send the link to your computer' : 'Send link'}
         </span>
       </button>
-      <a {...other} href={DOWNLOAD_URL} className={`cta-v cta-other ${primaryClass(size)}`}>
+      <a {...other} href={guideUrl()} className={`cta-v cta-other ${primaryClass(size)}`}>
         {lg ? 'Get Underset — Free' : 'Get Underset'}
         <ArrowUpRight aria-hidden className={`${arrow} group-hover:translate-x-0.5 group-hover:-translate-y-0.5`} strokeWidth={2.25} />
       </a>

@@ -2,12 +2,12 @@ import { REPO_URL } from '@/lib/links'
 import { GithubMark } from '../Buttons'
 import { Wordmark } from '../Nav'
 
-export function Footer() {
+export function Footer({ home }: { home?: string }) {
   return (
     <footer className="border-t border-groove bg-night">
       <div className="mx-auto flex max-w-[90rem] flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-12">
         <div className="flex flex-col gap-3">
-          <Wordmark />
+          <Wordmark href={home} />
           <p className="text-dust">Built for music lovers.</p>
         </div>
         <div className="flex flex-col gap-3 text-sm text-dust lg:items-end">

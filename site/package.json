@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p . && vite build && npm run build:ssr && node scripts/prerender.mjs dist/index.html dist-ssr/entry-server.js",
+    "build": "tsc -p . && vite build && npm run build:ssr && node scripts/prerender.mjs dist/index.html dist-ssr/entry-server.js && node scripts/prerender.mjs dist/download/index.html dist-ssr/entry-server.js download",
     "preview": "vite preview",
     "build:local": "tsc -p . && vite build --mode standalone && npm run build:ssr && node scripts/prerender.mjs preview/index.html dist-ssr/entry-server.js",
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr --logLevel warn"
