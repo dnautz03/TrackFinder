@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/lib/use-reduced-motion'
 
 /**
- * Hairline grid behind the hero, adapted from the Provably grid lines.
+ * Page-wide hairline grid, fixed behind all content (adapted from the Provably
+ * grid lines). Content sits on solid "plates", so the lines pass behind it.
  * Lime "signal" segments run down the lines (pure CSS animations), and on
  * desktop the lines nearest the pointer light up. Nothing re-renders per frame.
  */
@@ -90,9 +91,7 @@ export function SignalGrid({ className }: { className?: string }) {
   // Pointer glint: eases toward the pointer, lights the nearest lines (mouse only)
   useEffect(() => {
     const layer = glintsRef.current
-    // the grid wrapper ignores the pointer, so listen on the section it decorates
-    const panel = layer?.parentElement?.parentElement
-    if (!layer || !panel || reduced) return
+    if (!layer || reduced) return
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)')
     const s = { tx: 0, ty: 0, x: 0, y: 0, level: 0, target: 0, frame: 0, running: false }
 
@@ -119,9 +118,9 @@ export function SignalGrid({ className }: { className?: string }) {
     }
     const move = (e: PointerEvent) => {
       if (!fine.matches) return
-      const box = panel.getBoundingClientRect()
-      s.tx = e.clientX - box.left
-      s.ty = e.clientY - box.top
+      // the grid is fixed to the viewport, so client coordinates map directly
+      s.tx = e.clientX
+      s.ty = e.clientY
       if (s.level < 0.02) {
         s.x = s.tx
         s.y = s.ty
@@ -133,17 +132,17 @@ export function SignalGrid({ className }: { className?: string }) {
       s.target = 0
       run()
     }
-    panel.addEventListener('pointermove', move, { passive: true })
-    panel.addEventListener('pointerleave', leave)
+    window.addEventListener('pointermove', move, { passive: true })
+    document.documentElement.addEventListener('pointerleave', leave)
     return () => {
       cancelAnimationFrame(s.frame)
-      panel.removeEventListener('pointermove', move)
-      panel.removeEventListener('pointerleave', leave)
+      window.removeEventListener('pointermove', move)
+      document.documentElement.removeEventListener('pointerleave', leave)
     }
   }, [reduced])
 
   return (
-    <div className={cn('pointer-events-none absolute inset-0', className)} aria-hidden>
+    <div className={cn('sg-root pointer-events-none fixed inset-0 -z-10', className)} aria-hidden>
       <div ref={gridRef} className="sg-grid" />
       <div ref={glintsRef} className="sg-glints">
         {lines.map((x) => (

@@ -37,7 +37,7 @@ Scale (fluid)
 - Small: 15px
 - Mono label: 11px, tracking 0.06em, uppercase
 
-All fonts are self-hosted via Fontsource: no Google request, and only the Latin subset loads.
+All fonts are self-hosted (no Google request) and trimmed with `scripts/fonts.sh` to the axes and characters the page uses: Archivo 700–900 / 110–125% width, Instrument Sans 400–600, JetBrains Mono 400–700.
 
 ## Space and layout
 
@@ -68,7 +68,7 @@ All fonts are self-hosted via Fontsource: no Google request, and only the Latin 
 
 Hero moments (adapted from the Provably component, in our palette)
 1. **Digging → mixing switch.** The hero loads in greyscale. A switch with a tiny spinning record stands in for the O in MORE. Click it, press M, or drag the knob: a lime-edged colour wave spreads from it across the hero. Left alone it flips on after 2.2s. The nav CTA sits outside the wave and stays lime the whole time.
-2. **Signal grid.** Hairline vertical grid with soft lime segments flowing slowly and continuously down the lines (14–26s per pass, no pauses, already mid-flight on load; CSS only). On desktop, the lines nearest the pointer light up.
+2. **Signal grid.** Page-wide, fixed behind all content; text, buttons and cards sit on solid `.plate` backings so the lines pass behind them. Hairline vertical grid with soft lime segments flowing slowly and continuously down the lines (14–26s per pass, no pauses, already mid-flight on load; CSS only). On desktop, the lines nearest the pointer light up.
 3. **Kinetic headline.** Letters get heavier (800 → 900) as the mouse nears; widths are locked so nothing shifts.
 4. **Button sweep.** A light band crosses the CTAs on hover, plus the magnetic pull.
 5. **SignalDeck loop.** Sets turn into a clean list, constantly.
@@ -91,3 +91,13 @@ Rules
 | Footer | Wordmark, GitHub link, copyright, non-affiliation note |
 
 Headings use `WordsReveal`: words rise out of a mask in sequence when scrolled into view.
+
+## Performance
+
+- The page is prerendered at build time (`src/entry-server.tsx` + `scripts/prerender.mjs`) and hydrated on load, so the headline and buttons paint before JavaScript runs.
+- Motion loads in two parts: `m` components + hooks up front, animation/layout features (`LazyMotion`) right after.
+- The colour wave uses a small rAF tween (`src/lib/tween.ts`) instead of Motion's `animate()`.
+- `useReducedMotion` from `src/lib` is hydration-safe (false while hydrating, real value right after).
+- Display font is preloaded. Canvases cap pixel ratio at 2 and pause off screen.
+
+Measured on an emulated mid-range phone (4× CPU slowdown, slow 4G, no compression): FCP 0.87 s, LCP 1.33 s, CLS 0. Gzipped total transfer ≈ 218 KB.

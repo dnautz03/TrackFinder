@@ -1,27 +1,29 @@
 @import 'tailwindcss';
 
-/* Fonts: Latin subset only (the whole site is in English). */
+/* Fonts: trimmed to what the page uses (see scripts/fonts.sh).
+   Archivo: weight 700–900, width 110–125%. Instrument Sans: 400–600.
+   JetBrains Mono: 400–700. Basic Latin + the punctuation we print. */
 @font-face {
   font-family: 'Archivo Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
-  src: url('@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2') format('woff2-variations');
+  font-weight: 700 900;
+  font-stretch: 110% 125%;
+  src: url('./fonts/archivo.woff2') format('woff2-variations');
 }
 @font-face {
   font-family: 'Instrument Sans Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400 700;
-  src: url('@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2') format('woff2-variations');
+  font-weight: 400 600;
+  src: url('./fonts/instrument.woff2') format('woff2-variations');
 }
 @font-face {
   font-family: 'JetBrains Mono Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 800;
-  src: url('@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  src: url('./fonts/mono.woff2') format('woff2-variations');
 }
 
 /* ───────── Design tokens — Underground Signal ───────── */
@@ -150,7 +152,7 @@
   background-image: linear-gradient(to right, #1a1d16 1px, transparent 1px);
   background-size: var(--sg-step) 100%;
   background-position: calc(50% - var(--sg-step) / 2) 0;
-  mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 85%, transparent);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 92%, transparent);
   animation: fadeUp 1.2s var(--ease-out-expo) 0.3s both;
 }
 .sg-glints,
@@ -158,7 +160,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 85%, transparent);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 92%, transparent);
 }
 .sg-glints { --sg-gy: 50%; }
 .sg-glint {
@@ -386,3 +388,12 @@
 
 /* Closing record */
 .record-spin { animation: spin 16s linear infinite; transform-origin: 50% 50%; }
+
+/* Solid backing so the page grid passes behind content instead of through it */
+.plate {
+  background-color: var(--color-night);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* Fixed page grid: isolate it so its animations never trigger page repaints */
+.sg-root { contain: strict; }

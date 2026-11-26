@@ -26,6 +26,8 @@ npm run dev
 npm run build
 ```
 
-Output goes to `dist/`, served from `/TrackFinder/`. For a custom domain, build with `BASE_PATH=/`.
+Output goes to `dist/`, served from `/TrackFinder/`. The build prerenders the page into `dist/index.html`.
+
+Fonts in `src/fonts/` are trimmed copies; regenerate them with `scripts/fonts.sh` (needs `pip install fonttools brotli`). For a custom domain, build with `BASE_PATH=/`.
 
 Design rules live in [DESIGN.md](DESIGN.md).

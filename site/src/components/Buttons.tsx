@@ -56,7 +56,7 @@ export function GhostCta({ href, children }: { href: string; children: ReactNode
       {...m}
       href={href}
       style={{ ['--sweep' as string]: 'rgb(200 255 46 / 0.16)' }}
-      className="btn-sweep inline-flex h-14 items-center justify-center gap-2.5 rounded-full border border-groove px-6 text-[1.0625rem] font-medium text-bone transition-[transform,border-color,background-color] duration-300 ease-out-expo select-none hover:border-dust hover:bg-deck active:scale-[0.97]"
+      className="btn-sweep inline-flex h-14 items-center justify-center gap-2.5 rounded-full border border-groove bg-night px-6 text-[1.0625rem] font-medium text-bone transition-[transform,border-color,background-color] duration-300 ease-out-expo select-none hover:border-dust hover:bg-deck active:scale-[0.97]"
     >
       <GithubMark className="size-[1.05em]" />
       {children}

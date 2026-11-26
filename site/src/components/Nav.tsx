@@ -34,11 +34,7 @@ export function Nav() {
     >
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:px-12">
         <Wordmark />
-        <div className="flex items-center gap-8">
-          <ul className="hidden items-center gap-7 text-[0.95rem] text-dust md:flex">
-            <li><a className="transition-colors hover:text-bone" href="#features">Features</a></li>
-            <li><a className="transition-colors hover:text-bone" href="#how-it-works">How it works</a></li>
-          </ul>
+        <div className="flex items-center">
           <PrimaryCta href={DOWNLOAD_URL} size="sm">
             <span className="sm:hidden">Get it free</span>
             <span className="hidden sm:inline">Get TrackFinder</span>

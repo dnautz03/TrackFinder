@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, m as Motion } from 'motion/react'
 import { buildTimeline, type TimelineMarker } from '../lib/exampleSets'
+import { useReducedMotion } from '@/lib/use-reduced-motion'
 
 const SWEEP_MS = 13000
 const HOLD_MS = 3200
@@ -36,10 +37,15 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
 
   const wrapRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [rows, setRows] = useState<Row[]>(reduced ? finalRows : [])
-  const [counts, setCounts] = useState(
-    reduced ? { kept: finalRows.length, removed: markers.length - finalRows.length } : { kept: 0, removed: 0 },
-  )
+  const [rows, setRows] = useState<Row[]>([])
+  const [counts, setCounts] = useState({ kept: 0, removed: 0 })
+
+  // Reduced motion: show the finished list straight away (after hydration)
+  useEffect(() => {
+    if (!reduced) return
+    setRows(finalRows)
+    setCounts({ kept: finalRows.length, removed: markers.length - finalRows.length })
+  }, [reduced, finalRows, markers])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -235,7 +241,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
               const filtered = m.kind !== 'keep'
               const n = rows.filter((r) => r.m.kind === 'keep' && r.m.id <= m.id).length
               return (
-                <motion.li
+                <Motion.li
                   key={m.id}
                   layout={!reduced}
                   initial={{ opacity: 0, y: 14 }}
@@ -263,7 +269,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
                   <span className={`font-mono text-[0.6875rem] tabular-nums ${filtered ? 'text-acid' : 'text-dust'}`}>
                     {filtered ? (m.kind === 'id' ? 'ID · out' : 'Repeat · out') : `${m.stamp}`}
                   </span>
-                </motion.li>
+                </Motion.li>
               )
             })}
           </AnimatePresence>

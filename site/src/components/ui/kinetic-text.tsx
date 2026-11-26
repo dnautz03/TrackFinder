@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useReducedMotion } from 'motion/react'
+import { useReducedMotion } from '@/lib/use-reduced-motion'
 
 /**
  * Letters get heavier as the mouse comes near, adapted from Provably's

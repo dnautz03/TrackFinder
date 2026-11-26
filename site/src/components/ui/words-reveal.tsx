@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { cn } from '@/lib/utils'
 
 export const EASE = [0.16, 1, 0.3, 1] as const
@@ -27,8 +27,8 @@ export function WordsReveal({
       <span aria-hidden>
         {words.map((w, i) => (
           <span key={`${w}-${i}`}>
-            <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
-              <motion.span
+            <span className="plate inline-block overflow-hidden pb-[0.08em] align-bottom">
+              <m.span
                 className={cn('inline-block', accentFrom !== undefined && i >= accentFrom && 'text-acid')}
                 initial={{ y: '105%' }}
                 whileInView={{ y: '0%' }}
@@ -36,7 +36,7 @@ export function WordsReveal({
                 transition={{ duration: 0.85, ease: EASE, delay: i * 0.055 }}
               >
                 {w}
-              </motion.span>
+              </m.span>
             </span>
             {i < words.length - 1 ? ' ' : null}
           </span>

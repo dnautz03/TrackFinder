@@ -1,7 +1,6 @@
-import { motion, useScroll, useTransform } from 'motion/react'
+import { m, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { DOWNLOAD_URL } from '@/lib/links'
-import { SignalGrid } from '@/components/ui/signal-grid'
 import { EASE, WordsReveal } from '@/components/ui/words-reveal'
 import { PrimaryCta } from '../Buttons'
 import { SendToComputer } from '../SendToComputer'
@@ -42,13 +41,12 @@ export function FinalCta() {
 
   return (
     <section ref={ref} aria-labelledby="cta-title" className="relative isolate overflow-hidden border-t border-groove">
-      <SignalGrid />
-      <motion.div
+      <m.div
         style={{ y }}
         className="pointer-events-none absolute top-1/2 right-[-38vw] -z-10 size-[110vw] max-h-[760px] max-w-[760px] -translate-y-1/2 opacity-80 sm:right-[-22vw] lg:right-[-8vw] lg:size-[56vw]"
       >
         <Record />
-      </motion.div>
+      </m.div>
 
       <div className="relative mx-auto max-w-[90rem] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-48">
         <WordsReveal
@@ -57,23 +55,22 @@ export function FinalCta() {
           accentFrom={3}
           className="max-w-[12ch] text-[clamp(2.9rem,10vw,7rem)] uppercase"
         />
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px 0px -10% 0px' }}
           transition={{ duration: 0.8, ease: EASE, delay: 0.35 }}
         >
-          <p className="mt-8 max-w-[30ch] text-[1.125rem] leading-relaxed text-dust sm:text-[1.25rem]">
+          <p className="plate mt-8 w-fit max-w-[30ch] text-[1.125rem] leading-relaxed text-dust sm:text-[1.25rem]">
             Spend less time searching and more time discovering music.
           </p>
           <div className="mt-10 flex flex-col items-start gap-4">
             <PrimaryCta href={DOWNLOAD_URL}>Get TrackFinder for free</PrimaryCta>
-            <p className="font-mono text-xs tracking-[0.04em] text-dust uppercase">Windows &amp; macOS · Free to use</p>
             <div className="hidden max-sm:pointer-coarse:block">
               <SendToComputer />
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

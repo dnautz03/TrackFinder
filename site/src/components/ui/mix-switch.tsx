@@ -12,14 +12,16 @@ import {
 } from 'react'
 import {
   AnimatePresence,
-  animate,
-  motion,
+  m,
   useMotionValue,
   useMotionValueEvent,
-  useReducedMotion,
-  type AnimationPlaybackControls,
   type MotionValue,
 } from 'motion/react'
+import { bezier, tween } from '@/lib/tween'
+import { useReducedMotion } from '@/lib/use-reduced-motion'
+
+const EASE_IN_WAVE = bezier(0.33, 0.05, 0.25, 1)
+const EASE_OUT_WAVE = bezier(0.55, 0, 0.3, 1)
 
 /**
  * "Digging → mixing" switch, adapted from Provably's verification toggle.
@@ -54,16 +56,25 @@ const EXPAND = 0.9
 const CONTRACT = 0.6
 
 export function MixProvider({ children }: { children: ReactNode }) {
-  const reduced = !!useReducedMotion()
-  const [on, setOn] = useState(reduced)
+  const reduced = useReducedMotion()
+  const [on, setOn] = useState(false)
   const [interacted, setInteracted] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const switchRef = useRef<HTMLButtonElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const geo = useRef({ x: 0, y: 0, max: 0 })
-  const onRef = useRef(reduced)
-  const anim = useRef<AnimationPlaybackControls | null>(null)
-  const progress = useMotionValue(reduced ? 1 : 0)
+  const onRef = useRef(false)
+  const anim = useRef<{ stop: () => void } | null>(null)
+  const progress = useMotionValue(0)
+
+  // Reduced motion: start in colour, no wave (applied right after hydration)
+  useEffect(() => {
+    if (!reduced) return
+    anim.current?.stop()
+    onRef.current = true
+    setOn(true)
+    progress.set(1)
+  }, [reduced, progress])
 
   // Writes the wave centre and edge into CSS variables; no React render per frame
   const paint = useCallback((v: number) => {
@@ -120,10 +131,10 @@ export function MixProvider({ children }: { children: ReactNode }) {
         return
       }
       const distance = Math.abs((next ? 1 : 0) - progress.get())
-      anim.current = animate(progress, next ? 1 : 0, {
+      anim.current = tween(progress, next ? 1 : 0, {
         duration: (next ? EXPAND : CONTRACT) * Math.max(0.3, distance),
         delay: next && progress.get() === 0 ? 0.1 : 0,
-        ease: next ? [0.33, 0.05, 0.25, 1] : [0.55, 0, 0.3, 1],
+        ease: next ? EASE_IN_WAVE : EASE_OUT_WAVE,
       })
     },
     [measure, progress, reduced],
@@ -258,7 +269,7 @@ export function MixHint() {
   return (
     <AnimatePresence>
       {!interacted && !reduced && (
-        <motion.span
+        <m.span
           className="mix-hint"
           initial={{ opacity: 0, x: 8 }}
           animate={{ opacity: 1, x: 0, transition: { delay: 0.9, duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
@@ -266,7 +277,7 @@ export function MixHint() {
           aria-hidden
         >
           <span className="mix-hint-arrow">←</span> Click to mix <kbd className="mix-key">M</kbd>
-        </motion.span>
+        </m.span>
       )}
     </AnimatePresence>
   )

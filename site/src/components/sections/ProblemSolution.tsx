@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react'
+import { AnimatePresence, m, useInView } from 'motion/react'
 import { Check } from 'lucide-react'
 import { EASE, WordsReveal } from '@/components/ui/words-reveal'
+import { useReducedMotion } from '@/lib/use-reduced-motion'
 
 const BEFORE = ['Endless tracklists.', 'Too many browser tabs.', 'Repeated tracks.', 'Hours of manual digging.']
 const AFTER = ['One search.', 'Your chosen date range.', 'Clean track results.', 'More time for music.']
@@ -34,13 +35,13 @@ function TabStorm() {
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[300px] items-center justify-center rounded-[20px] border border-groove bg-deck/50 p-5 sm:min-h-[360px] sm:p-8"
+      className="relative flex min-h-[300px] items-center justify-center rounded-[20px] border border-groove bg-[#101210] p-5 sm:min-h-[360px] sm:p-8"
       aria-hidden
     >
-      <motion.div layout className="flex max-w-[30rem] flex-wrap justify-center gap-2 sm:gap-2.5">
+      <m.div layout className="flex max-w-[30rem] flex-wrap justify-center gap-2 sm:gap-2.5">
         <AnimatePresence mode="popLayout">
           {one ? (
-            <motion.div
+            <m.div
               key="one"
               layout
               initial={{ opacity: 0, scale: 0.6 }}
@@ -56,10 +57,10 @@ function TabStorm() {
                 <rect x="16" y="8" width="3" height="4" rx="1" />
               </svg>
               <span className="font-display text-lg font-bold tracking-[-0.02em] [font-stretch:115%]">TrackFinder</span>
-            </motion.div>
+            </m.div>
           ) : (
             Array.from({ length: TAB_COUNT }, (_, i) => (
-              <motion.div
+              <m.div
                 key={`tab-${i}`}
                 layout
                 initial={{ opacity: 0, y: 10, rotate: (i % 3) - 1 }}
@@ -71,11 +72,11 @@ function TabStorm() {
                 <span className="size-2 rounded-sm bg-[#3a3e33]" />
                 Tracklist {String(i + 1).padStart(2, '0')}
                 <span className="ml-1 text-[#5c6253]">×</span>
-              </motion.div>
+              </m.div>
             ))
           )}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
     </div>
   )
 }
@@ -83,12 +84,12 @@ function TabStorm() {
 function ListBlock({ title, items, kind }: { title: string; items: string[]; kind: 'before' | 'after' }) {
   return (
     <div>
-      <h3 className={`mb-4 font-mono text-xs tracking-[0.06em] uppercase ${kind === 'after' ? 'text-acid' : 'text-dust'}`}>
+      <h3 className={`plate mb-4 w-fit font-mono text-xs tracking-[0.06em] uppercase ${kind === 'after' ? 'text-acid' : 'text-dust'}`}>
         {title}
       </h3>
       <ul className="flex flex-col">
         {items.map((item, i) => (
-          <motion.li
+          <m.li
             key={item}
             initial={{ opacity: 0, x: kind === 'before' ? -12 : 12 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -97,10 +98,10 @@ function ListBlock({ title, items, kind }: { title: string; items: string[]; kin
             className="flex items-center gap-3 border-b border-groove py-3.5 text-[1.0625rem] sm:text-lg"
           >
             {kind === 'before' ? (
-              <span className="relative text-dust">
+              <span className="plate relative text-dust">
                 {item}
                 {/* acid strike drawn across once the row is in view */}
-                <motion.span
+                <m.span
                   aria-hidden
                   className="absolute top-1/2 left-0 h-[2px] w-full origin-left bg-acid/80"
                   initial={{ scaleX: 0 }}
@@ -111,7 +112,7 @@ function ListBlock({ title, items, kind }: { title: string; items: string[]; kin
               </span>
             ) : (
               <>
-                <motion.span
+                <m.span
                   className="grid size-6 shrink-0 place-items-center rounded-full bg-acid text-night"
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
@@ -119,11 +120,11 @@ function ListBlock({ title, items, kind }: { title: string; items: string[]; kin
                   transition={{ type: 'spring', stiffness: 420, damping: 18, delay: 0.6 + i * 0.12 }}
                 >
                   <Check className="size-3.5" strokeWidth={3} aria-hidden />
-                </motion.span>
-                <span className="text-bone">{item}</span>
+                </m.span>
+                <span className="plate text-bone">{item}</span>
               </>
             )}
-          </motion.li>
+          </m.li>
         ))}
       </ul>
     </div>

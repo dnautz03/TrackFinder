@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 
+// Class names are hand-written without conflicts, so plain clsx is enough
+// (tailwind-merge would add ~25 KB for nothing here).
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return clsx(inputs)
 }
