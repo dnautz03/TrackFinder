@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import { fileURLToPath, URL } from 'node:url'
+import { FAQ } from './src/lib/faq'
 
 const alias = { '@': fileURLToPath(new URL('./src', import.meta.url)) }
 
@@ -63,6 +64,29 @@ function seo(): Plugin {
         meta({ name: 'twitter:description', content: SHARE_DESCRIPTION }),
         meta({ name: 'twitter:image', content: abs('og.png') }),
       ]
+      // Structured data: what the app is (no ratings: we don't invent any) + the FAQ
+      const app = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'TrackFinder',
+        description:
+          'Free desktop app that finds the tracks a DJ played in their sets over a chosen period, from public tracklists on 1001Tracklists. Removes IDs and duplicates, links to Spotify and SoundCloud, and exports a TXT list.',
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Windows 10, Windows 11, macOS 14 or later',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        downloadUrl: 'https://github.com/dnautz03/TrackFinder/releases/latest',
+        url: siteUrl ? `${siteUrl}${base}` : undefined,
+        image: abs('og.png'),
+      }
+      const faq = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      }
+      for (const data of [app, faq]) {
+        tags.push({ tag: 'script', attrs: { type: 'application/ld+json' }, children: JSON.stringify(data), injectTo: 'head' })
+      }
       if (siteUrl) {
         tags.push({ tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${base}` }, injectTo: 'head' })
         tags.push(meta({ property: 'og:url', content: `${siteUrl}${base}` }))

@@ -1,9 +1,7 @@
 import { m, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
-import { DOWNLOAD_URL } from '@/lib/links'
 import { EASE, WordsReveal } from '@/components/ui/words-reveal'
-import { PrimaryCta } from '../Buttons'
-import { SendToComputer } from '../SendToComputer'
+import { DownloadCta } from '../DownloadCta'
 
 /** A record spinning slowly behind the closing call to action. */
 function Record() {
@@ -64,11 +62,8 @@ export function FinalCta() {
           <p className="plate mt-8 w-fit max-w-[30ch] text-[1.125rem] leading-relaxed text-dust sm:text-[1.25rem]">
             Spend less time searching and more time discovering music.
           </p>
-          <div className="mt-10 flex flex-col items-start gap-4">
-            <PrimaryCta href={DOWNLOAD_URL}>Get TrackFinder for free</PrimaryCta>
-            <div className="hidden max-sm:pointer-coarse:block">
-              <SendToComputer />
-            </div>
+          <div className="mt-10 flex flex-wrap items-start gap-4">
+            <DownloadCta />
           </div>
         </m.div>
       </div>

@@ -492,3 +492,33 @@
 @keyframes storyFlow { to { stroke-dashoffset: -0.125; } }
 .story-fade { opacity: 0; transition: opacity 0.3s ease; }
 .story-fade.is-on { opacity: 1; }
+
+/* Platform-aware CTA: <html data-platform> is set before first paint */
+.cta-v { display: none !important; }
+html:not([data-platform]) .cta-other,
+html[data-platform='other'] .cta-other,
+html[data-platform='windows'] .cta-windows,
+html[data-platform='mac'] .cta-mac,
+html[data-platform='mobile'] .cta-mobile { display: inline-flex !important; }
+
+/* FAQ answer eases in when a question opens */
+.faq[open] .faq-answer { animation: fadeUp 450ms var(--ease-out-expo) both; }
+
+/* Loading skeletons: shown only before JavaScript is ready */
+.sk {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #151713 0%, #1f2219 50%, #151713 100%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+@keyframes skShimmer { to { background-position: -200% 0; } }
+.sk-only { display: none; }
+html:not(.js-ready) .sk-only { display: grid; }
+.sk-canvas:not([data-ready]) {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #121410 0%, #1a1d16 50%, #121410 100%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .sk, .sk-canvas { animation: none !important; } }

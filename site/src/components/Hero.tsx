@@ -1,8 +1,8 @@
-import { DOWNLOAD_URL, REPO_URL } from '@/lib/links'
+import { REPO_URL } from '@/lib/links'
 import { KineticText } from '@/components/ui/kinetic-text'
 import { MixHint, MixProvider, MixSwitch, MixWave, useMix } from '@/components/ui/mix-switch'
-import { GhostCta, PrimaryCta } from './Buttons'
-import { SendToComputer } from './SendToComputer'
+import { GhostCta } from './Buttons'
+import { DownloadCta } from './DownloadCta'
 import { SignalDeck } from './SignalDeck'
 
 export function Hero() {
@@ -47,13 +47,9 @@ function HeroStage() {
               Discover the tracks your favourite DJs play. Explore their sets, find new music and build your next selection.
             </p>
 
-            <div className="fade-up mt-7 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center" style={{ animationDelay: '300ms' }}>
-              <PrimaryCta href={DOWNLOAD_URL}>Get TrackFinder — Free</PrimaryCta>
+            <div className="fade-up mt-7 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center" style={{ animationDelay: '300ms' }}>
+              <DownloadCta />
               <GhostCta href={REPO_URL}>View on GitHub</GhostCta>
-            </div>
-
-            <div className="fade-up mt-5 hidden max-sm:pointer-coarse:block" style={{ animationDelay: '380ms' }}>
-              <SendToComputer />
             </div>
           </div>
 

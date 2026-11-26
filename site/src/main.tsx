@@ -14,3 +14,6 @@ const app = (
 // runs; React then hydrates that markup. Dev mode renders from scratch.
 if (root.hasChildNodes()) hydrateRoot(root, app)
 else createRoot(root).render(app)
+
+// Skeletons for the animated parts show until JavaScript takes over
+requestAnimationFrame(() => document.documentElement.classList.add('js-ready'))

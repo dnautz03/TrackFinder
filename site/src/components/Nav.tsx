@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DOWNLOAD_URL } from '../lib/links'
-import { PrimaryCta } from './Buttons'
+import { DownloadCta } from './DownloadCta'
 
 /** Placeholder wordmark until the real TrackFinder logo arrives. */
 export function Wordmark() {
@@ -35,10 +34,7 @@ export function Nav() {
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:px-12">
         <Wordmark />
         <div className="flex items-center">
-          <PrimaryCta href={DOWNLOAD_URL} size="sm">
-            <span className="sm:hidden">Get it free</span>
-            <span className="hidden sm:inline">Get TrackFinder</span>
-          </PrimaryCta>
+          <DownloadCta size="sm" />
         </div>
       </nav>
     </header>

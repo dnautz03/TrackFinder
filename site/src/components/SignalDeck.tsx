@@ -108,6 +108,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
         ctx.fillStyle = m.pos * W <= head ? C.played : C.tick
         ctx.fillRect(x - 0.5, 0, 1, 7)
       }
+      canvas.dataset.ready = '1'
       if (progress > 0 && progress < 1) {
         ctx.fillStyle = C.head
         ctx.fillRect(Math.round(head), 0, 1.5, H)
@@ -212,7 +213,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
       {/* waveform */}
       <figure ref={wrapRef} className={`relative m-0 pb-6 ${waveClass}`} aria-label="Example: three DJ sets being scanned for tracks">
         <div className="relative">
-          <canvas ref={canvasRef} className="block h-[64px] w-full sm:h-[96px] lg:h-[112px]" aria-hidden />
+          <canvas ref={canvasRef} className="sk-canvas block h-[64px] w-full sm:h-[96px] lg:h-[112px]" aria-hidden />
           <div className="pointer-events-none absolute inset-x-0 -bottom-6 font-mono text-[0.6875rem] text-dust" aria-hidden>
             {spans.map((s) => (
               <span key={s.label} className="absolute" style={{ left: `${s.start * 100}%` }}>
@@ -236,6 +237,14 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
           className="relative flex h-[232px] flex-col justify-end overflow-hidden sm:h-[300px] [mask-image:linear-gradient(to_bottom,transparent,black_28%)]"
           aria-label="Example track list"
         >
+          {/* skeleton rows until JavaScript starts the animation */}
+          {[0, 1, 2, 3].map((k) => (
+            <li key={`sk-${k}`} aria-hidden className="sk-only grid shrink-0 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-b border-groove/70 py-3.5">
+              <span className="sk h-2.5 w-5" />
+              <span className="sk h-3" style={{ width: `${70 - k * 9}%` }} />
+              <span className="sk h-2.5 w-12" />
+            </li>
+          ))}
           <AnimatePresence initial={false}>
             {rows.map(({ m, struck }) => {
               const filtered = m.kind !== 'keep'

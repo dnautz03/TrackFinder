@@ -6,7 +6,7 @@ type Feature = { title: string; text: string; icon: LucideIcon; motion: string; 
 
 /* Laid out like a tracklist: cue time, track, note. Each icon has its own hover move. */
 const FEATURES: Feature[] = [
-  { title: 'Discover tracks', text: 'Find the music your favourite DJs play.', icon: Disc3, motion: 'ic-spin', stamp: '0:00' },
+  { title: 'Discover tracks', text: 'Find the music your favourite DJs play, from their public tracklists on 1001Tracklists.', icon: Disc3, motion: 'ic-spin', stamp: '0:00' },
   { title: 'Explore any time period', text: 'From a weekend to an entire year.', icon: CalendarRange, motion: 'ic-pop', stamp: '0:06' },
   { title: 'Less noise, more music', text: 'Filter out IDs and duplicate tracks.', icon: ListFilter, motion: 'ic-squeeze', stamp: '0:12' },
   { title: 'Keep digging', text: 'Jump to Spotify or SoundCloud for tracks linked there.', icon: Headphones, motion: 'ic-bob', stamp: '0:18' },

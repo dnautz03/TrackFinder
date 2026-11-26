@@ -1,5 +1,6 @@
 import { LazyMotion, MotionConfig } from 'motion/react'
 import { Hero } from './components/Hero'
+import { Faq } from './components/sections/Faq'
 import { Features } from './components/sections/Features'
 import { FinalCta } from './components/sections/FinalCta'
 import { Footer } from './components/sections/Footer'
@@ -28,6 +29,7 @@ export default function App() {
         <Features />
         <HowItWorks />
         <FinalCta />
+        <Faq />
       </main>
       <Footer />
       </LazyMotion>
