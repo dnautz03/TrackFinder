@@ -68,8 +68,8 @@ export function ProblemSolution() {
         <DjToTracklist />
       </div>
       <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:mt-20 lg:gap-14">
-        <ListBlock title="Before TrackFinder" items={BEFORE} kind="before" />
-        <ListBlock title="With TrackFinder" items={AFTER} kind="after" />
+        <ListBlock title="Before Underset" items={BEFORE} kind="before" />
+        <ListBlock title="With Underset" items={AFTER} kind="after" />
       </div>
     </section>
   )

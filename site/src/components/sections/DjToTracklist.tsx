@@ -4,7 +4,7 @@ import { useReducedMotion } from '@/lib/use-reduced-motion'
 import { EASE } from '@/components/ui/words-reveal'
 
 /**
- * The TrackFinder story in one loop:
+ * The Underset story in one loop:
  *   a DJ plays out → their sets pile up month after month → an arrow from every
  *   month merges into one → a single clean tracklist fills in (IDs and repeats
  *   struck out). Illustrative: names and months are made up.
@@ -240,7 +240,7 @@ export function DjToTracklist() {
     <div
       ref={ref}
       role="img"
-      aria-label="A DJ plays sets over several months; TrackFinder gathers the tracks from all of them into one clean tracklist, without IDs or repeats."
+      aria-label="A DJ plays sets over several months; Underset gathers the tracks from all of them into one clean tracklist, without IDs or repeats."
       className="grid grid-cols-1 gap-8 rounded-[24px] border border-groove bg-[#101210] p-5 sm:p-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-6 lg:p-10"
     >
       {/* captions share one top line; each visual is centred in the space below */}

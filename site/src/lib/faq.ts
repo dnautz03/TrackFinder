@@ -1,8 +1,8 @@
 /** Shared by the FAQ section and the FAQPage structured data. Facts from the README. */
 export const FAQ: { q: string; a: string }[] = [
   {
-    q: 'Is TrackFinder free?',
-    a: 'Yes. TrackFinder is free to download and use for personal use. No account, no subscription.',
+    q: 'Is Underset free?',
+    a: 'Yes. Underset is free to download and use for personal use. No account, no subscription.',
   },
   {
     q: 'Does it work on Windows and Mac?',
@@ -10,11 +10,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Where do the tracks come from?',
-    a: 'TrackFinder reads the public tracklists on 1001Tracklists for the DJ and period you choose, then merges them into one list. TrackFinder is not affiliated with 1001Tracklists.',
+    a: 'Underset reads the public tracklists on 1001Tracklists for the DJ and period you choose, then merges them into one list. Underset is not affiliated with 1001Tracklists.',
   },
   {
     q: 'Which DJs can I search?',
-    a: 'Any artist whose sets have tracklists published on 1001Tracklists. Type their name, pick a period, and TrackFinder does the digging.',
+    a: 'Any artist whose sets have tracklists published on 1001Tracklists. Type their name, pick a period, and Underset does the digging.',
   },
   {
     q: 'What happens to IDs and repeated tracks?',
@@ -26,6 +26,6 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Can I use it on my phone?',
-    a: 'TrackFinder is a desktop app for Windows and macOS. On your phone, send yourself the link and download it on your computer.',
+    a: 'Underset is a desktop app for Windows and macOS. On your phone, send yourself the link and download it on your computer.',
   },
 ]

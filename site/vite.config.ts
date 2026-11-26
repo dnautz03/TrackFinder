@@ -10,15 +10,15 @@ const alias = { '@': fileURLToPath(new URL('./src', import.meta.url)) }
 /**
  * Hosting:
  * - Cloudflare Pages (default): site served from the root, base "/".
- * - GitHub Pages: build with BASE_PATH=/TrackFinder/.
+ * - GitHub Pages: build with BASE_PATH=/Underset/.
  * SITE_URL sets the public address used for canonical/og:url, absolute
  * share-image URLs and sitemap.xml (defaults to the workers.dev address).
  */
 const base = process.env.BASE_PATH ?? '/'
 // Live address; override with SITE_URL (e.g. after adding a custom domain).
-const siteUrl = (process.env.SITE_URL ?? 'https://trackfinder.dnautz.workers.dev').replace(/\/+$/, '')
+const siteUrl = (process.env.SITE_URL ?? 'https://underset.dnautz.workers.dev').replace(/\/+$/, '')
 
-const TITLE = 'TrackFinder — Less Digging. More Mixing.'
+const TITLE = 'Underset — Less Digging. More Mixing.'
 const SHARE_DESCRIPTION = 'Discover the tracks your favourite DJs play. Free for Windows and macOS.'
 
 // Preload the display font so the hero headline paints in its real face sooner.
@@ -52,13 +52,13 @@ function seo(): Plugin {
       const tags: HtmlTagDescriptor[] = [
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }, injectTo: 'head' },
         meta({ property: 'og:type', content: 'website' }),
-        meta({ property: 'og:site_name', content: 'TrackFinder' }),
+        meta({ property: 'og:site_name', content: 'Underset' }),
         meta({ property: 'og:title', content: TITLE }),
         meta({ property: 'og:description', content: SHARE_DESCRIPTION }),
         meta({ property: 'og:image', content: abs('og.png') }),
         meta({ property: 'og:image:width', content: '1200' }),
         meta({ property: 'og:image:height', content: '630' }),
-        meta({ property: 'og:image:alt', content: 'TrackFinder: Less digging. More mixing.' }),
+        meta({ property: 'og:image:alt', content: 'Underset: Less digging. More mixing.' }),
         meta({ name: 'twitter:card', content: 'summary_large_image' }),
         meta({ name: 'twitter:title', content: TITLE }),
         meta({ name: 'twitter:description', content: SHARE_DESCRIPTION }),
@@ -68,14 +68,14 @@ function seo(): Plugin {
       const app = {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: 'TrackFinder',
+        name: 'Underset',
         description:
           'Free desktop app that finds the tracks a DJ played in their sets over a chosen period, from public tracklists on 1001Tracklists. Removes IDs and duplicates, links to Spotify and SoundCloud, and exports a TXT list.',
         applicationCategory: 'MultimediaApplication',
         operatingSystem: 'Windows 10, Windows 11, macOS 14 or later',
         isAccessibleForFree: true,
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        downloadUrl: 'https://github.com/dnautz03/TrackFinder/releases/latest',
+        downloadUrl: 'https://github.com/dnautz03/Underset/releases/latest',
         url: siteUrl ? `${siteUrl}${base}` : undefined,
         image: abs('og.png'),
       }

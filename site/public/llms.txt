@@ -1,6 +1,6 @@
-# TrackFinder
+# Underset
 
-> Free desktop app for Windows and macOS that finds the tracks your favourite DJs play. Type a DJ's name and a period; TrackFinder reads their public tracklists on 1001Tracklists and gives you one clean list of every track they played.
+> Free desktop app for Windows and macOS that finds the tracks your favourite DJs play. Type a DJ's name and a period; Underset reads their public tracklists on 1001Tracklists and gives you one clean list of every track they played.
 
 ## What it does
 - Search by DJ / artist name and pick a period (quick ranges or exact custom dates).
@@ -16,5 +16,5 @@
 - License: freeware; the app is not open source.
 
 ## Links
-- Download (latest release): https://github.com/dnautz03/TrackFinder/releases/latest
-- Source page and instructions: https://github.com/dnautz03/TrackFinder
+- Download (latest release): https://github.com/dnautz03/Underset/releases/latest
+- Source page and instructions: https://github.com/dnautz03/Underset

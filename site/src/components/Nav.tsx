@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { DownloadCta } from './DownloadCta'
 
-/** Placeholder wordmark until the real TrackFinder logo arrives. */
+/** Placeholder wordmark until the real Underset logo arrives. */
 export function Wordmark() {
   return (
-    <a href="#top" className="inline-flex items-center gap-2.5" aria-label="TrackFinder, back to top">
+    <a href="#top" className="inline-flex items-center gap-2.5" aria-label="Underset, back to top">
       <svg viewBox="0 0 20 20" className="size-5 text-acid" aria-hidden fill="currentColor">
         <rect x="1" y="7" width="3" height="6" rx="1" />
         <rect x="6" y="3" width="3" height="14" rx="1" />
         <rect x="11" y="5" width="3" height="10" rx="1" />
         <rect x="16" y="8" width="3" height="4" rx="1" />
       </svg>
-      <span className="font-display text-[1.05rem] font-bold tracking-[-0.02em] [font-stretch:115%]">TrackFinder</span>
+      <span className="font-display text-[1.05rem] font-bold tracking-[-0.02em] [font-stretch:115%] uppercase">Underset</span>
     </a>
   )
 }

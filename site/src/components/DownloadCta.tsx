@@ -17,7 +17,7 @@ function useShare() {
   const [state, setState] = useState<'idle' | 'copied' | 'manual'>('idle')
   const url = typeof window === 'undefined' ? '' : window.location.origin + window.location.pathname
   const share = async () => {
-    const data = { title: 'TrackFinder', text: 'TrackFinder: find the tracks your favourite DJs play.', url }
+    const data = { title: 'Underset', text: 'Underset: find the tracks your favourite DJs play.', url }
     try {
       if (navigator.share) {
         await navigator.share(data)
@@ -65,7 +65,7 @@ export function DownloadCta({ size = 'lg' }: { size?: Size }) {
         </span>
       </button>
       <a {...other} href={DOWNLOAD_URL} className={`cta-v cta-other ${primaryClass(size)}`}>
-        {lg ? 'Get TrackFinder — Free' : 'Get TrackFinder'}
+        {lg ? 'Get Underset — Free' : 'Get Underset'}
         <ArrowUpRight aria-hidden className={`${arrow} group-hover:translate-x-0.5 group-hover:-translate-y-0.5`} strokeWidth={2.25} />
       </a>
       {state === 'manual' && (

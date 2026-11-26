@@ -1,6 +1,6 @@
-# TrackFinder — landing page
+# Underset — landing page
 
-Marketing site for TrackFinder. Static, built with Vite + React + Tailwind + Motion.
+Marketing site for Underset. Static, built with Vite + React + Tailwind + Motion.
 
 ## Preview without a server
 
@@ -22,16 +22,16 @@ npm run dev
 
 ## Deploy: Cloudflare (Workers Builds, static assets)
 
-Connect the repo `dnautz03/TrackFinder` in Cloudflare → Workers & Pages → Create → Import a repository.
+Connect the repo `dnautz03/Underset` in Cloudflare → Workers & Pages → Create → Import a repository.
 
 | Setting | Value |
 |---|---|
-| Project name | `trackfinder` |
+| Project name | `underset` |
 | Build command | `npm run build` |
 | Deploy command | `npx wrangler deploy` (default) |
 | Non-production branch deploy command | default |
 | Root directory / Path (advanced) | `site` |
-| Build variable (optional) | `SITE_URL` — only needed to override the default `https://trackfinder.dnautz.workers.dev` |
+| Build variable (optional) | `SITE_URL` — only needed to override the default `https://underset.dnautz.workers.dev` |
 
 `wrangler.jsonc` tells Cloudflare to serve `dist/` as static assets (no server code).
 Node 22 comes from `.nvmrc`. `public/_headers` sets long caching for hashed assets and
@@ -47,7 +47,7 @@ npm run build
 ```
 
 Output goes to `dist/`, served from the site root. The build prerenders the page into
-`dist/index.html`. For GitHub Pages instead, build with `BASE_PATH=/TrackFinder/`.
+`dist/index.html`. For GitHub Pages instead, build with `BASE_PATH=/Underset/`.
 
 Fonts in `src/fonts/` are trimmed copies; regenerate them with `scripts/fonts.sh`
 (needs `pip install fonttools brotli`). The share image is `public/og.png` (1200 × 630).

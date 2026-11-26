@@ -24,7 +24,7 @@ function Record() {
       <circle cx="320" cy="320" r="100" fill="#c8ff2e" />
       <text fill="#0b0c0a" fontSize="12" fontWeight="700" fontFamily="JetBrains Mono Variable, monospace">
         <textPath href="#label-ring" textLength="418" lengthAdjust="spacingAndGlyphs">
-          TRACKFINDER · LESS DIGGING · MORE MIXING ·
+          UNDERSET · LESS DIGGING · MORE MIXING ·
         </textPath>
       </text>
       <circle cx="320" cy="320" r="7" fill="#0b0c0a" />

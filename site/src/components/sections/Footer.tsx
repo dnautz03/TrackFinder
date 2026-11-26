@@ -16,9 +16,9 @@ export function Footer() {
             className="inline-flex min-h-11 items-center gap-2 text-bone underline decoration-groove underline-offset-4 transition-colors hover:decoration-acid"
           >
             <GithubMark className="size-4" />
-            TrackFinder on GitHub
+            Underset on GitHub
           </a>
-          <p>© 2026 TrackFinder · Not affiliated with 1001Tracklists, Spotify or SoundCloud.</p>
+          <p>© 2026 Underset · Not affiliated with 1001Tracklists, Spotify or SoundCloud.</p>
         </div>
       </div>
     </footer>

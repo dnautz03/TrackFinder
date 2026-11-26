@@ -1,4 +1,4 @@
-# TrackFinder site — Design system
+# Underset site — Design system
 
 Direction: **Underground Signal**, with editorial asymmetry borrowed from *Modern Record Culture*.
 One idea runs through the page: **the page is a tracklist**. Messy sets become one clean list.
@@ -84,7 +84,7 @@ Rules
 
 | Section | One authored moment |
 |---|---|
-| Problem / Solution | The TrackFinder story: a DJ plays out at the decks (head nods, platters spin at 124 BPM, sound rings) → sets pile up month by month (JUN–SEP) → an arrow from every month merges into one → a single tracklist fills in, each track tagged with its month, IDs and repeats struck out. Horizontal on desktop, vertical on phones |
+| Problem / Solution | The Underset story: a DJ plays out at the decks (head nods, platters spin at 124 BPM, sound rings) → sets pile up month by month (JUN–SEP) → an arrow from every month merges into one → a single tracklist fills in, each track tagged with its month, IDs and repeats struck out. Horizontal on desktop, vertical on phones |
 | Features (`#features`) | Laid out as a tracklist: index · cue, title, note, icon. Rows rise in; on hover a fill sweeps in, the title turns acid and each icon does its own move |
 | How it works (`#how-it-works`) | Progress line fills with scroll; each step has a small looping illustration (typing a DJ name, range chips, a playing list). Abstract on purpose — real screenshots go beside them when available |
 | Final CTA | A record spins slowly with light parallax; signal grid behind |
