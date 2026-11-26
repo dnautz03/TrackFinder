@@ -8,9 +8,10 @@ import { cn } from '@/lib/utils'
  * desktop the lines nearest the pointer light up. Nothing re-renders per frame.
  */
 
-type Pulse = { x: number; duration: number; delay: number; tone: string }
+type Pulse = { key: string; x: number; duration: number; delay: number; tone: string }
 
-const TONES = ['bg-acid', 'bg-acid', 'bg-bone/70', 'bg-acid/60']
+// Head colour of each flowing segment
+const TONES = ['#c8ff2e', '#c8ff2e', '#d9ff73', 'rgb(236 238 228 / 0.7)']
 
 const random = (seed: number) => {
   const v = Math.sin(seed * 127.1 + 311.7) * 43758.5453
@@ -39,18 +40,26 @@ export function SignalGrid({ className }: { className?: string }) {
       const reach = Math.floor(centre / step)
       const xs: number[] = []
       const next: Pulse[] = []
-      layer.style.setProperty('--sg-travel', `${height + 80}px`)
+      layer.style.setProperty('--sg-travel', `${height + 200}px`)
       for (let i = -reach; i <= reach; i++) {
         const x = centre + i * step
         if (x < 1 || x > width - 1) continue
         xs.push(x)
-        if (random(i + 50) > 0.7) continue
-        next.push({
-          x,
-          duration: 5 + random(i + 90) * 6,
-          delay: 0.8 + random(i + 130) * 6,
-          tone: TONES[Math.floor(random(i + 170) * TONES.length)],
-        })
+        if (random(i + 50) > 0.8) continue
+        // Slow, continuous flow: long cycles, no pause between passes, and a
+        // negative delay so segments are already mid-flight when the page opens.
+        const duration = 14 + random(i + 90) * 12
+        const tone = TONES[Math.floor(random(i + 170) * TONES.length)]
+        const count = random(i + 210) > 0.5 ? 2 : 1
+        for (let k = 0; k < count; k++) {
+          next.push({
+            key: `${i}-${k}`,
+            x,
+            duration,
+            delay: -(random(i + 130) * duration + (k * duration) / count),
+            tone,
+          })
+        }
       }
       geo.current = { lines: xs, step }
       setLines(xs)
@@ -145,11 +154,12 @@ export function SignalGrid({ className }: { className?: string }) {
         {!reduced &&
           pulses.map((p) => (
             <span
-              key={p.x}
-              className={cn('sg-pulse', p.tone)}
+              key={p.key}
+              className="sg-pulse"
               style={
                 {
                   left: p.x,
+                  '--sg-tone': p.tone,
                   '--sg-duration': `${p.duration.toFixed(2)}s`,
                   '--sg-delay': `${p.delay.toFixed(2)}s`,
                 } as CSSProperties

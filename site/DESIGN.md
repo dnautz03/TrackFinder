@@ -68,7 +68,7 @@ All fonts are self-hosted via Fontsource: no Google request, and only the Latin 
 
 Hero moments (adapted from the Provably component, in our palette)
 1. **Digging → mixing switch.** The hero loads in greyscale. A switch with a tiny spinning record stands in for the O in MORE. Click it, press M, or drag the knob: a lime-edged colour wave spreads from it across the hero. Left alone it flips on after 2.2s. The nav CTA sits outside the wave and stays lime the whole time.
-2. **Signal grid.** Hairline vertical grid with lime segments running down the lines (CSS only). On desktop, the lines nearest the pointer light up.
+2. **Signal grid.** Hairline vertical grid with soft lime segments flowing slowly and continuously down the lines (14–26s per pass, no pauses, already mid-flight on load; CSS only). On desktop, the lines nearest the pointer light up.
 3. **Kinetic headline.** Letters get heavier (800 → 900) as the mouse nears; widths are locked so nothing shifts.
 4. **Button sweep.** A light band crosses the CTAs on hover, plus the magnetic pull.
 5. **SignalDeck loop.** Sets turn into a clean list, constantly.
@@ -79,3 +79,15 @@ Rules
 - The canvas pauses when it is off screen or the tab is hidden. Its pixel ratio is capped at 2.
 - A subtle 124 BPM pulse plays just behind the playhead, so it feels like rhythm without any sound. Audio never plays.
 - `prefers-reduced-motion`: no reveal, no sweep. The waveform renders fully played and the list shows its final state.
+
+## Sections
+
+| Section | One authored moment |
+|---|---|
+| Problem / Solution | Twelve "Tracklist" tabs collapse into one TrackFinder tab and back, on a loop; "before" items get an acid strike, "after" items get a check |
+| Features (`#features`) | Laid out as a tracklist: index · cue, title, note, icon. Rows rise in; on hover a fill sweeps in, the title turns acid and each icon does its own move |
+| How it works (`#how-it-works`) | Progress line fills with scroll; each step has a small looping illustration (typing a DJ name, range chips, a playing list). Abstract on purpose — real screenshots go beside them when available |
+| Final CTA | A record spins slowly with light parallax; signal grid behind |
+| Footer | Wordmark, GitHub link, copyright, non-affiliation note |
+
+Headings use `WordsReveal`: words rise out of a mask in sequence when scrolled into view.

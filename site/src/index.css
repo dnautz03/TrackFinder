@@ -114,6 +114,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .record-spin, .eq-bar, .group:hover [class*='ic-'] { animation: none !important; }
   .line-rise, .line-in, .fade-up { animation: none; }
   .mix-switch[aria-checked='true'] .mix-record { animation: none; }
   .btn-sweep::after { display: none; }
@@ -177,17 +178,20 @@
   position: absolute;
   top: 0;
   width: 1.5px;
-  height: 72px;
+  height: 180px;
   margin-left: -0.25px;
   border-radius: 999px;
-  opacity: 0.85;
-  transform: translateY(-100%);
+  /* soft tail above, bright head below: reads as light flowing down the line */
+  background: linear-gradient(to bottom, transparent, var(--sg-tone) 82%, transparent);
+  opacity: 0.9;
+  transform: translate3d(0, -180px, 0);
+  will-change: transform;
   animation: sgPulse var(--sg-duration) linear var(--sg-delay) infinite;
 }
 .sg-pulses[data-paused='true'] .sg-pulse { animation-play-state: paused; }
 @keyframes sgPulse {
-  0% { transform: translateY(-100%); }
-  62%, 100% { transform: translateY(var(--sg-travel)); }
+  from { transform: translate3d(0, -180px, 0); }
+  to { transform: translate3d(0, var(--sg-travel), 0); }
 }
 
 /* ───────── Kinetic text ───────── */
@@ -362,3 +366,23 @@
   translate: 120% 0;
   transition: translate 0.8s cubic-bezier(0.65, 0, 0.35, 1);
 }
+
+/* ───────── Section details ───────── */
+/* Feature icons: each has its own small move on row hover */
+.group:hover .ic-spin { animation: icSpin 1.6s linear infinite; }
+.group:hover .ic-pop { animation: icPop 0.5s var(--ease-out-expo); }
+.group:hover .ic-squeeze { animation: icSqueeze 0.6s var(--ease-out-expo); }
+.group:hover .ic-bob { animation: icBob 0.9s ease-in-out infinite; }
+.group:hover .ic-drop { animation: icDrop 0.6s var(--ease-out-expo); }
+@keyframes icSpin { to { rotate: 360deg; } }
+@keyframes icPop { 0% { scale: 1; } 40% { scale: 1.25; } 100% { scale: 1; } }
+@keyframes icSqueeze { 0% { scale: 1 1; } 35% { scale: 1.2 0.75; } 70% { scale: 0.92 1.08; } 100% { scale: 1 1; } }
+@keyframes icBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@keyframes icDrop { 0% { translate: 0 -6px; opacity: 0; } 100% { translate: 0 0; opacity: 1; } }
+
+/* Equalizer bars on the playing row */
+.eq-bar { height: 4px; animation: eq 0.7s ease-in-out infinite alternate; }
+@keyframes eq { from { height: 3px; } to { height: 14px; } }
+
+/* Closing record */
+.record-spin { animation: spin 16s linear infinite; transform-origin: 50% 50%; }

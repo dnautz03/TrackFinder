@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DOWNLOAD_URL, REPO_URL } from '../lib/links'
+import { DOWNLOAD_URL } from '../lib/links'
 import { PrimaryCta } from './Buttons'
 
 /** Placeholder wordmark until the real TrackFinder logo arrives. */
@@ -38,7 +38,6 @@ export function Nav() {
           <ul className="hidden items-center gap-7 text-[0.95rem] text-dust md:flex">
             <li><a className="transition-colors hover:text-bone" href="#features">Features</a></li>
             <li><a className="transition-colors hover:text-bone" href="#how-it-works">How it works</a></li>
-            <li><a className="transition-colors hover:text-bone" href={REPO_URL}>GitHub</a></li>
           </ul>
           <PrimaryCta href={DOWNLOAD_URL} size="sm">
             <span className="sm:hidden">Get it free</span>
