@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="google-site-verification" content="gUSZJASuXc6j2a-PV6WQTz2M93XW3RL4pj2kpqzHqCQ" />
+    <meta name="msvalidate.01" content="396E109D893892C7D4BD0336E5C7D731" />
+    <meta name="theme-color" content="#0b0c0a" />
+    <meta name="color-scheme" content="dark" />
+    <!-- Paint the page dark from the very first frame (no white flash) -->
+    <style>html{background:#0b0c0a;color:#eceee4;color-scheme:dark}</style>
+    <!-- Show the right guide before first paint: ?os=, else the visitor's platform -->
+    <script>
+      (function () {
+        try {
+          var q = new URLSearchParams(location.search).get('os')
+          var n = navigator, ua = n.userAgent || '', d = n.userAgentData || {}
+          var p = (d.platform || n.platform || '').toLowerCase()
+          var mac = /mac|iphone|ipad|ipod/.test(p) || /mac os x|iphone|ipad/i.test(ua)
+          document.documentElement.setAttribute('data-os', q === 'mac' || q === 'windows' ? q : mac ? 'mac' : 'windows')
+        } catch (e) {}
+      })()
+    </script>
+    <title>Install Underset — Windows &amp; macOS guide</title>
+    <meta
+      name="description"
+      content="How to open Underset the first time: what the Windows SmartScreen and macOS security warnings mean, and how to get past them in a minute."
+    />
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"%3E%3Crect width="32" height="32" rx="7" fill="%230b0c0a"/%3E%3Cg fill="%23c8ff2e"%3E%3Crect x="5" y="12" width="4" height="8" rx="1.5"/%3E%3Crect x="11" y="6" width="4" height="20" rx="1.5"/%3E%3Crect x="17" y="9" width="4" height="14" rx="1.5"/%3E%3Crect x="23" y="13" width="4" height="6" rx="1.5"/%3E%3C/g%3E%3C/svg%3E' />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/download.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,535 @@
+@import 'tailwindcss';
+
+/* Fonts: trimmed to what the page uses (see scripts/fonts.sh).
+   Archivo: weight 700–900, width 110–125%. Instrument Sans: 400–600.
+   JetBrains Mono: 400–700. Basic Latin + the punctuation we print. */
+@font-face {
+  font-family: 'Archivo Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700 900;
+  font-stretch: 110% 125%;
+  src: url('./fonts/archivo.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Instrument Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 600;
+  src: url('./fonts/instrument.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url('./fonts/mono.woff2') format('woff2-variations');
+}
+
+/* ───────── Design tokens — Underground Signal ───────── */
+@theme {
+  --color-night: #0b0c0a;      /* page background */
+  --color-deck: #151713;       /* raised surface */
+  --color-groove: #24271f;     /* hairlines, unplayed waveform */
+  --color-dust: #8a9080;       /* secondary text */
+  --color-bone: #eceee4;       /* primary text */
+  --color-acid: #c8ff2e;       /* the one accent */
+  --color-acid-deep: #a8dc12;  /* accent pressed */
+
+  --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, sans-serif;
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-night);
+    color: var(--color-bone);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-acid);
+    color: var(--color-night);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-acid);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Display type: Archivo at its widest setting */
+.type-display {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+/* Headline lines rise out of a mask on first paint (CSS only, no JS wait) */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.line-rise {
+  display: block;
+  animation: rise 900ms var(--ease-out-expo) both;
+}
+@keyframes rise {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+.fade-up {
+  animation: fadeUp 700ms var(--ease-out-expo) both;
+}
+/* Headline lines: rise + fade, no clipping (the switch hint hangs below) */
+.line-in {
+  display: block;
+  animation: lineIn 800ms var(--ease-out-expo) both;
+}
+@keyframes lineIn {
+  from { opacity: 0; transform: translateY(0.3em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .record-spin, .eq-bar, .group:hover [class*='ic-'] { animation: none !important; }
+  .line-rise, .line-in, .fade-up { animation: none; }
+  .mix-switch[aria-checked='true'] .mix-record { animation: none; }
+  .btn-sweep::after { display: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hero layout: on phones the waveform sits right under the headline so the
+   motion is above the fold; on desktop it docks beside "More mixing." */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'head' 'wave' 'copy' 'list';
+}
+.hero-head { grid-area: head; }
+.hero-wave { grid-area: wave; }
+.hero-copy { grid-area: copy; }
+.hero-list { grid-area: list; }
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: 'head wave' 'copy list';
+  }
+  .hero-wave { align-self: end; }
+}
+
+/* ───────── Signal grid (after Provably's grid lines) ───────── */
+.sg-grid {
+  --sg-step: max(72px, min(120px, 8.4vw));
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, #1a1d16 1px, transparent 1px);
+  background-size: var(--sg-step) 100%;
+  background-position: calc(50% - var(--sg-step) / 2) 0;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 92%, transparent);
+  animation: fadeUp 1.2s var(--ease-out-expo) 0.3s both;
+}
+.sg-glints,
+.sg-pulses {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 92%, transparent);
+}
+.sg-glints { --sg-gy: 50%; }
+.sg-glint {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(var(--sg-gy) - 240px),
+    rgb(200 255 46 / 0.55) var(--sg-gy),
+    transparent calc(var(--sg-gy) + 240px)
+  );
+}
+.sg-pulse {
+  position: absolute;
+  top: 0;
+  width: 1.5px;
+  height: 180px;
+  margin-left: -0.25px;
+  border-radius: 999px;
+  /* soft tail above, bright head below: reads as light flowing down the line */
+  background: linear-gradient(to bottom, transparent, var(--sg-tone) 82%, transparent);
+  opacity: 0.9;
+  transform: translate3d(0, -180px, 0);
+  will-change: transform;
+  animation: sgPulse var(--sg-duration) linear var(--sg-delay) infinite;
+}
+.sg-pulses[data-paused='true'] .sg-pulse { animation-play-state: paused; }
+@keyframes sgPulse {
+  from { transform: translate3d(0, -180px, 0); }
+  to { transform: translate3d(0, var(--sg-travel), 0); }
+}
+
+/* ───────── Kinetic text ───────── */
+.kt-char { transition: font-weight 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+.kt[data-locked='true'] .kt-char { display: inline-block; text-align: center; }
+
+/* ───────── Mix switch: stands in for the O in MORE ───────── */
+.mix-slot {
+  position: relative;
+  display: inline-block;
+  width: 1.6em;
+  height: 0.7em;
+  /* optically centred in the O slot: R has a wider left bearing than M has on
+     its right; bottom edge sits on the baseline, top at cap height */
+  margin: 0 0.045em 0 0.075em;
+  vertical-align: -0.018em;
+}
+.mix-switch {
+  --knob-x: 0em;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+.mix-switch[aria-checked='true'] { --knob-x: 0.9em; }
+.mix-switch:focus-visible { outline: 3px solid var(--color-acid); outline-offset: 5px; border-radius: 999px; }
+.mix-track {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 0.05em solid #4a4f43;
+  background: var(--color-deck);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.mix-switch:hover .mix-track { border-color: var(--color-dust); }
+.mix-switch[aria-checked='true'] .mix-track {
+  border-color: var(--color-acid);
+  background: rgb(200 255 46 / 0.14);
+}
+.mix-knob {
+  position: absolute;
+  top: 50%;
+  left: 0.08em;
+  width: 0.54em;
+  height: 0.54em;
+  margin-top: -0.27em;
+  translate: var(--knob-x) 0;
+  border-radius: 999px;
+  transition: translate 0.46s cubic-bezier(0.3, 1.35, 0.5, 1), scale 0.18s ease;
+}
+.mix-switch:hover .mix-knob { translate: calc(var(--knob-x) + 0.04em) 0; }
+.mix-switch[aria-checked='true']:hover .mix-knob { translate: calc(var(--knob-x) - 0.04em) 0; }
+.mix-switch[data-dragging='true'] { cursor: grabbing; }
+.mix-switch[data-dragging='true'] .mix-knob,
+.mix-switch[data-dragging='true']:hover .mix-knob { translate: var(--knob-x) 0; scale: 1.06; transition: scale 0.18s ease; }
+.mix-switch:active .mix-knob { scale: 1.1 0.92; }
+/* The knob is a tiny record: grooves, a label and a spindle. It spins when mixing. */
+.mix-record {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, var(--color-night) 0 7%, transparent 8%),
+    radial-gradient(circle, #8a9080 0 30%, transparent 31%),
+    repeating-radial-gradient(circle, #2d3128 0 1.5%, #1c1f19 1.5% 3%),
+    #1c1f19;
+  box-shadow: 0 0 0 0.02em rgb(0 0 0 / 0.5);
+  transition: background 0.3s ease;
+}
+.mix-record::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, transparent 0 20%, rgb(255 255 255 / 0.18) 25%, transparent 30% 70%, rgb(255 255 255 / 0.12) 75%, transparent 80%);
+}
+.mix-switch[aria-checked='true'] .mix-record {
+  background:
+    radial-gradient(circle, var(--color-night) 0 7%, transparent 8%),
+    radial-gradient(circle, var(--color-acid) 0 30%, transparent 31%),
+    repeating-radial-gradient(circle, #2d3128 0 1.5%, #1c1f19 1.5% 3%),
+    #1c1f19;
+  animation: spin 1.8s linear infinite;
+}
+@keyframes spin { to { rotate: 360deg; } }
+.mix-hint {
+  position: absolute;
+  top: 50%; /* vertically centred on MORE */
+  left: calc(100% + 28px);
+  display: none;
+  pointer-events: none;
+}
+@media (min-width: 1280px) and (hover: hover) {
+  .mix-hint { display: block; }
+}
+.mix-hint,
+.mix-hint * {
+  font-family: var(--font-mono);
+  font-stretch: 100%;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.mix-hint {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-dust);
+  translate: 0 -50%;
+}
+.mix-hint-arrow {
+  display: inline-block;
+  color: var(--color-acid);
+  animation: nudge 1.2s var(--ease-out-quart) infinite;
+}
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+}
+.mix-key {
+  display: inline-grid;
+  min-width: 1.7em;
+  padding: 0.2em 0.4em;
+  place-items: center;
+  border: 1px solid #3a3e33;
+  border-bottom-width: 2px;
+  border-radius: 0.35em;
+  color: var(--color-bone);
+  font: inherit;
+}
+
+/* ───────── Colour wave ───────── */
+.mix-root { position: relative; isolation: isolate; }
+.mix-wave {
+  --wx: 50%; --wy: 50%; --r0: 0px; --r1: 0px; --band: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.mix-wave-gray {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: grayscale(1);
+  backdrop-filter: grayscale(1);
+  -webkit-mask-image: radial-gradient(circle at var(--wx) var(--wy), transparent var(--r0), #000 var(--r1));
+  mask-image: radial-gradient(circle at var(--wx) var(--wy), transparent var(--r0), #000 var(--r1));
+}
+.mix-wave-band {
+  position: absolute;
+  inset: 0;
+  opacity: var(--band);
+  background: radial-gradient(
+    circle at var(--wx) var(--wy),
+    transparent max(0px, calc(var(--r1) - 220px)),
+    rgb(200 255 46 / 0.1) calc(var(--r1) - 70px),
+    transparent var(--r1)
+  );
+}
+.mix-wave[data-state='clear'] > *,
+.mix-wave[data-state='mono'] > * { visibility: hidden; }
+.mix-root:has(> .mix-wave[data-state='mono']) > .mix-panel { filter: grayscale(1); }
+
+/* ───────── Button light sweep (after Provably's cv-sweep) ───────── */
+.btn-sweep { position: relative; isolation: isolate; overflow: hidden; }
+.btn-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, var(--sweep, rgb(255 255 255 / 0.55)) 50%, transparent 65%);
+  translate: -120% 0;
+}
+.btn-sweep:hover::after,
+.btn-sweep:focus-visible::after {
+  translate: 120% 0;
+  transition: translate 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ───────── Section details ───────── */
+/* Feature icons: each has its own small move on row hover */
+.group:hover .ic-spin { animation: icSpin 1.6s linear infinite; }
+.group:hover .ic-pop { animation: icPop 0.5s var(--ease-out-expo); }
+.group:hover .ic-squeeze { animation: icSqueeze 0.6s var(--ease-out-expo); }
+.group:hover .ic-bob { animation: icBob 0.9s ease-in-out infinite; }
+.group:hover .ic-drop { animation: icDrop 0.6s var(--ease-out-expo); }
+@keyframes icSpin { to { rotate: 360deg; } }
+@keyframes icPop { 0% { scale: 1; } 40% { scale: 1.25; } 100% { scale: 1; } }
+@keyframes icSqueeze { 0% { scale: 1 1; } 35% { scale: 1.2 0.75; } 70% { scale: 0.92 1.08; } 100% { scale: 1 1; } }
+@keyframes icBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@keyframes icDrop { 0% { translate: 0 -6px; opacity: 0; } 100% { translate: 0 0; opacity: 1; } }
+
+/* Equalizer bars on the playing row */
+.eq-bar { height: 4px; animation: eq 0.7s ease-in-out infinite alternate; }
+@keyframes eq { from { height: 3px; } to { height: 14px; } }
+
+/* Closing record */
+.record-spin { animation: spin 16s linear infinite; transform-origin: 50% 50%; }
+
+/* Solid backing so the page grid passes behind content instead of through it */
+.plate {
+  background-color: var(--color-night);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* Fixed page grid: isolate it so its animations never trigger page repaints */
+.sg-root { contain: strict; }
+
+/* How it works: typed DJ name — each letter eases in, caret blinks when idle */
+.type-char {
+  display: inline-block;
+  animation: typeIn 260ms var(--ease-out-expo) both;
+}
+@keyframes typeIn {
+  from { opacity: 0; transform: translateY(0.35em); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.type-caret { display: inline-block; animation: caret 1s steps(1) infinite; }
+.type-caret.is-typing { animation: none; }
+@keyframes caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .type-char, .type-caret { animation: none; }
+  .dj-ring, .dj-nod, .dj-scratch, .dj-platter, .dj-fader, .story-flow { animation: none !important; }
+  .story-tile, .story-arrow, .story-fade { transition: none !important; }
+}
+
+/* ───────── DJ → tracklist story ───────── */
+/* 124 BPM: one beat = 0.484s */
+.dj-nod { animation: djNod 0.484s ease-in-out infinite; transform-origin: 120px 76px; }
+@keyframes djNod { 0%, 100% { transform: translateY(0) rotate(0deg); } 45% { transform: translateY(2.5px) rotate(-2deg); } }
+.dj-scratch { animation: djScratch 0.968s ease-in-out infinite; transform-origin: 160px 106px; }
+@keyframes djScratch { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-5deg); } 50% { transform: rotate(2deg); } 75% { transform: rotate(-3deg); } }
+.dj-platter { animation: spin 1.8s linear infinite; }
+.dj-fader { animation: djFader 1.936s ease-in-out infinite; }
+@keyframes djFader { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+.dj-ring {
+  fill: none;
+  stroke: var(--color-acid);
+  stroke-width: 1.5;
+  transform-origin: 120px 134px;
+  animation: djRing 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+@keyframes djRing {
+  from { transform: scale(0.6); opacity: 0.7; }
+  to { transform: scale(2.4); opacity: 0; }
+}
+
+.story-month {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  fill: #5c6253;
+  transition: fill 0.4s ease;
+}
+.story-month.is-on { fill: var(--color-acid); }
+.story-tile {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.story-tile.is-on { opacity: 1; transform: scale(1); }
+.story-tile:nth-of-type(2) { transition-delay: 0.08s; }
+.story-tile:nth-of-type(3) { transition-delay: 0.16s; }
+.story-arrow {
+  fill: none;
+  stroke: #4a503f;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0; /* hides the round cap dot before the line is drawn */
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.65, 0, 0.35, 1), stroke 0.4s ease, opacity 0.2s ease;
+}
+.story-arrow.is-on { stroke-dashoffset: 0; stroke: rgb(200 255 46 / 0.55); opacity: 1; }
+.story-shaft.is-on { stroke: var(--color-acid); stroke-width: 2.5; }
+/* lime dots travelling along each arrow towards the tracklist */
+.story-flow {
+  fill: none;
+  stroke: var(--color-acid);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.001 0.124;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.8s;
+  animation: storyFlow 1.6s linear infinite;
+}
+.story-flow.is-on { opacity: 1; }
+@keyframes storyFlow { to { stroke-dashoffset: -0.125; } }
+.story-fade { opacity: 0; transition: opacity 0.3s ease; }
+.story-fade.is-on { opacity: 1; }
+
+/* Platform-aware CTA: <html data-platform> is set before first paint */
+.cta-v { display: none !important; }
+html:not([data-platform]) .cta-other,
+html[data-platform='other'] .cta-other,
+html[data-platform='windows'] .cta-windows,
+html[data-platform='mac'] .cta-mac,
+html[data-platform='mobile'] .cta-mobile { display: inline-flex !important; }
+
+/* FAQ answer eases in when a question opens */
+.faq[open] .faq-answer { animation: fadeUp 450ms var(--ease-out-expo) both; }
+
+/* Loading skeletons: shown only before JavaScript is ready */
+.sk {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #151713 0%, #1f2219 50%, #151713 100%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+@keyframes skShimmer { to { background-position: -200% 0; } }
+.sk-only { display: none; }
+html:not(.js-ready) .sk-only { display: grid; }
+.sk-canvas:not([data-ready]) {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #121410 0%, #1a1d16 50%, #121410 100%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .sk, .sk-canvas { animation: none !important; } }
+
+/* Install guide: <html data-os> is set before first paint, so the right guide shows without JS */
+.os-panel { display: none; }
+html:not([data-os]) .os-windows,
+html[data-os='windows'] .os-windows,
+html[data-os='mac'] .os-mac { display: block; }
+.os-tab { color: var(--color-dust); }
+.os-tab:hover { color: var(--color-bone); }
+html:not([data-os]) .os-tab-windows,
+html[data-os='windows'] .os-tab-windows,
+html[data-os='mac'] .os-tab-mac { background: var(--color-acid); color: var(--color-night); }

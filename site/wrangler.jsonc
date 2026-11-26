@@ -1,0 +1,10 @@
+// Cloudflare Workers (static assets only, no server code).
+// Workers Builds runs `npm run build`, then `npx wrangler deploy` uploads dist/.
+{
+  "name": "underset",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

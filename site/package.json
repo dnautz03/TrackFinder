@@ -1,0 +1,34 @@
+{
+  "name": "underset-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p . && vite build && npm run build:ssr && node scripts/prerender.mjs dist/index.html dist-ssr/entry-server.js && node scripts/prerender.mjs dist/download/index.html dist-ssr/entry-server.js download",
+    "preview": "vite preview",
+    "build:local": "tsc -p . && vite build --mode standalone && npm run build:ssr && node scripts/prerender.mjs preview/index.html dist-ssr/entry-server.js",
+    "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr --logLevel warn"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.79.0",
+    "motion": "^14.14.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

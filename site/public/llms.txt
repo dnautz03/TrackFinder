@@ -1,0 +1,21 @@
+# Underset
+
+> Free desktop app for Windows and macOS that finds the tracks your favourite DJs play. Type a DJ's name and a period; Underset reads their public tracklists on 1001Tracklists and gives you one clean list of every track they played.
+
+## What it does
+- Search by DJ / artist name and pick a period (quick ranges or exact custom dates).
+- Merges all of that DJ's sets in the period into one list.
+- Leaves out IDs, unreleased tracks and duplicates by default (optional: include them).
+- Spotify and SoundCloud shortcuts for tracks that are linked there.
+- Saves the list as a .txt file, one "Artist – Title" per line.
+
+## Facts
+- Price: free for personal use. No account needed.
+- Platforms: Windows 10 (1809+) and Windows 11; macOS 14 Sonoma or newer (Apple Silicon and Intel). Desktop only, no mobile app.
+- Data source: public pages of 1001Tracklists. Not affiliated with 1001Tracklists, Spotify or SoundCloud.
+- License: freeware; the app is not open source.
+
+## Links
+- Install guide (Windows SmartScreen and macOS security warnings): https://underset.dnautz.workers.dev/download/
+- Download (latest release): https://github.com/dnautz03/Underset/releases/latest
+- Source page and instructions: https://github.com/dnautz03/Underset
