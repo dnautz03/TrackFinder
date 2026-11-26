@@ -50,11 +50,8 @@ function HeroStage() {
               <GhostCta href={REPO_URL}>View on GitHub</GhostCta>
             </div>
 
-            <div className="fade-up mt-5 flex flex-col gap-2 sm:mt-6" style={{ animationDelay: '380ms' }}>
-              <p className="font-mono text-xs tracking-[0.04em] text-dust uppercase">Free to use · Windows &amp; macOS</p>
-              <div className="hidden max-sm:pointer-coarse:block">
-                <SendToComputer />
-              </div>
+            <div className="fade-up mt-5 hidden max-sm:pointer-coarse:block" style={{ animationDelay: '380ms' }}>
+              <SendToComputer />
             </div>
           </div>
 

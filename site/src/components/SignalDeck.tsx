@@ -40,7 +40,6 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
   const [counts, setCounts] = useState(
     reduced ? { kept: finalRows.length, removed: markers.length - finalRows.length } : { kept: 0, removed: 0 },
   )
-  const [scanning, setScanning] = useState(!reduced)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -142,7 +141,6 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
       nextHit = 0
       setRows([])
       setCounts({ kept: 0, removed: 0 })
-      setScanning(true)
     }
 
     const hit = (m: TimelineMarker) => {
@@ -165,7 +163,6 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
         hit(markers[nextHit])
         nextHit++
       }
-      if (progress >= 1 && t < SWEEP_MS + 16) setScanning(false)
       if (t > SWEEP_MS + HOLD_MS) {
         cycleStart = now
         reset()
@@ -208,16 +205,6 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
     <>
       {/* waveform */}
       <figure ref={wrapRef} className={`relative m-0 pb-6 ${waveClass}`} aria-label="Example: three DJ sets being scanned for tracks">
-        <div className="mb-3 flex items-baseline justify-between font-mono text-[0.6875rem] tracking-[0.06em] text-dust uppercase">
-          <span>Example · 3 sets</span>
-          <span className="flex items-center gap-2" aria-live="off">
-            <span
-              className={`inline-block size-1.5 rounded-full ${scanning ? 'bg-acid animate-pulse' : 'bg-dust'}`}
-              aria-hidden
-            />
-            {scanning ? 'Scanning' : 'Done'}
-          </span>
-        </div>
         <div className="relative">
           <canvas ref={canvasRef} className="block h-[64px] w-full sm:h-[96px] lg:h-[112px]" aria-hidden />
           <div className="pointer-events-none absolute inset-x-0 -bottom-6 font-mono text-[0.6875rem] text-dust" aria-hidden>
