@@ -18,14 +18,14 @@ const base = process.env.BASE_PATH ?? '/'
 // Live address; override with SITE_URL (e.g. after adding a custom domain).
 const siteUrl = (process.env.SITE_URL ?? 'https://underset.dnautz.workers.dev').replace(/\/+$/, '')
 
-const TITLE = 'Underset — Less Digging. More Mixing.'
+const TITLE = 'Underset — Free DJ Tracklist Finder for Windows & Mac'
 const GUIDE_TITLE = 'Install Underset — Windows & macOS guide'
 const GUIDE_DESCRIPTION = 'What the Windows and macOS warnings mean, and how to open Underset in a minute.'
 const pages = {
   main: fileURLToPath(new URL('./index.html', import.meta.url)),
   download: fileURLToPath(new URL('./download/index.html', import.meta.url)),
 }
-const SHARE_DESCRIPTION = 'Discover the tracks your favourite DJs play. Free for Windows and macOS.'
+const SHARE_DESCRIPTION = 'Underset finds every track a DJ played, from their tracklists, in one clean list. Free for Windows and Mac.'
 
 // Preload the display font so the hero headline paints in its real face sooner.
 function preloadDisplayFont(): Plugin {
@@ -79,6 +79,7 @@ function seo(): Plugin {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Underset',
+        alternateName: ['Underset app', 'Underset DJ tracklist finder'],
         description:
           'Free desktop app that finds the tracks a DJ played in their sets over a chosen period, from public tracklists on 1001Tracklists. Removes IDs and duplicates, links to Spotify and SoundCloud, and exports a TXT list.',
         applicationCategory: 'MultimediaApplication',
@@ -88,6 +89,15 @@ function seo(): Plugin {
         downloadUrl: 'https://github.com/dnautz03/Underset/releases/latest',
         url: siteUrl ? `${siteUrl}${base}` : undefined,
         image: abs('og.png'),
+        sameAs: ['https://github.com/dnautz03/Underset'],
+      }
+      // Tells Google the site's name ("Underset") for the search result header
+      const site = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Underset',
+        alternateName: ['Underset app', 'Underset DJ tracklist finder'],
+        url: siteUrl ? `${siteUrl}${base}` : undefined,
       }
       const faq = {
         '@context': 'https://schema.org',
@@ -95,7 +105,7 @@ function seo(): Plugin {
         mainEntity: FAQ.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
       }
       // The app + FAQ data belongs to the home page only
-      for (const data of guide ? [] : [app, faq]) {
+      for (const data of guide ? [] : [site, app, faq]) {
         tags.push({ tag: 'script', attrs: { type: 'application/ld+json' }, children: JSON.stringify(data), injectTo: 'head' })
       }
       if (siteUrl) {
@@ -108,10 +118,11 @@ function seo(): Plugin {
       const robots = ['User-agent: *', 'Allow: /', ...(siteUrl ? [`Sitemap: ${siteUrl}${base}sitemap.xml`] : [])]
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots.join('\n') + '\n' })
       if (siteUrl) {
+        const lastmod = new Date().toISOString().slice(0, 10)
         this.emitFile({
           type: 'asset',
           fileName: 'sitemap.xml',
-          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc></url>\n  <url><loc>${siteUrl}${base}download/</loc></url>\n</urlset>\n`,
+          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc><lastmod>${lastmod}</lastmod></url>\n  <url><loc>${siteUrl}${base}download/</loc><lastmod>${lastmod}</lastmod></url>\n</urlset>\n`,
         })
       }
     },
