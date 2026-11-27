@@ -1,7 +1,7 @@
-import { REPO_URL } from '@/lib/links'
+import { REPO_URL, TRY_URL } from '@/lib/links'
 import { KineticText } from '@/components/ui/kinetic-text'
 import { MixHint, MixProvider, MixSwitch, MixWave, useMix } from '@/components/ui/mix-switch'
-import { GhostCta } from './Buttons'
+import { GhostCta, TryCta } from './Buttons'
 import { DownloadCta } from './DownloadCta'
 import { SignalDeck } from './SignalDeck'
 
@@ -51,6 +51,7 @@ function HeroStage() {
 
             <div className="fade-up mt-7 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center" style={{ animationDelay: '300ms' }}>
               <DownloadCta />
+              <TryCta href={TRY_URL} />
               <GhostCta href={REPO_URL}>View on GitHub</GhostCta>
             </div>
           </div>

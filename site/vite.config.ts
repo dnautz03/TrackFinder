@@ -21,9 +21,12 @@ const siteUrl = (process.env.SITE_URL ?? 'https://underset.dnautz.workers.dev').
 const TITLE = 'Underset — Free DJ Tracklist Finder for Windows & Mac'
 const GUIDE_TITLE = 'Install Underset — Windows & macOS guide'
 const GUIDE_DESCRIPTION = 'What the Windows and macOS warnings mean, and how to open Underset in a minute.'
+const TRY_TITLE = 'Try Underset — See every set a DJ played'
+const TRY_DESCRIPTION = 'Type a DJ and a period and see every set they played, with how many tracks are identified. Works on your phone.'
 const pages = {
   main: fileURLToPath(new URL('./index.html', import.meta.url)),
   download: fileURLToPath(new URL('./download/index.html', import.meta.url)),
+  try: fileURLToPath(new URL('./try/index.html', import.meta.url)),
 }
 const SHARE_DESCRIPTION = 'Underset finds every track a DJ played, from their tracklists, in one clean list. Free for Windows and Mac.'
 
@@ -55,9 +58,10 @@ function seo(): Plugin {
     name: 'seo',
     transformIndexHtml(_html, ctx) {
       const guide = ctx.path.includes('download')
-      const path = guide ? 'download/' : ''
-      const title = guide ? GUIDE_TITLE : TITLE
-      const description = guide ? GUIDE_DESCRIPTION : SHARE_DESCRIPTION
+      const tryPage = ctx.path.includes('try')
+      const path = guide ? 'download/' : tryPage ? 'try/' : ''
+      const title = guide ? GUIDE_TITLE : tryPage ? TRY_TITLE : TITLE
+      const description = guide ? GUIDE_DESCRIPTION : tryPage ? TRY_DESCRIPTION : SHARE_DESCRIPTION
       const meta = (attrs: Record<string, string>): HtmlTagDescriptor => ({ tag: 'meta', attrs, injectTo: 'head' })
       const tags: HtmlTagDescriptor[] = [
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }, injectTo: 'head' },
@@ -105,7 +109,7 @@ function seo(): Plugin {
         mainEntity: FAQ.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
       }
       // The app + FAQ data belongs to the home page only
-      for (const data of guide ? [] : [site, app, faq]) {
+      for (const data of guide || tryPage ? [] : [site, app, faq]) {
         tags.push({ tag: 'script', attrs: { type: 'application/ld+json' }, children: JSON.stringify(data), injectTo: 'head' })
       }
       if (siteUrl) {
@@ -122,7 +126,7 @@ function seo(): Plugin {
         this.emitFile({
           type: 'asset',
           fileName: 'sitemap.xml',
-          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc><lastmod>${lastmod}</lastmod></url>\n  <url><loc>${siteUrl}${base}download/</loc><lastmod>${lastmod}</lastmod></url>\n</urlset>\n`,
+          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}${base}</loc><lastmod>${lastmod}</lastmod></url>\n  <url><loc>${siteUrl}${base}try/</loc><lastmod>${lastmod}</lastmod></url>\n  <url><loc>${siteUrl}${base}download/</loc><lastmod>${lastmod}</lastmod></url>\n</urlset>\n`,
         })
       }
     },

@@ -11,11 +11,12 @@
 
 ## Facts
 - Price: free for personal use. No account needed.
-- Platforms: Windows 10 (1809+) and Windows 11; macOS 14 Sonoma or newer (Apple Silicon and Intel). Desktop only, no mobile app.
+- Platforms: Windows 10 (1809+) and Windows 11; macOS 14 Sonoma or newer (Apple Silicon and Intel). No mobile app; a web preview (any device) lists a DJ's sets in a period with identified-track counts, without track names.
 - Data source: public pages of 1001Tracklists. Not affiliated with 1001Tracklists, Spotify or SoundCloud.
 - License: freeware; the app is not open source.
 
 ## Links
+- Live preview (works on phones): https://underset.dnautz.workers.dev/try/
 - Install guide (Windows SmartScreen and macOS security warnings): https://underset.dnautz.workers.dev/download/
 - Download (latest release): https://github.com/dnautz03/Underset/releases/latest
 - Source page and instructions: https://github.com/dnautz03/Underset

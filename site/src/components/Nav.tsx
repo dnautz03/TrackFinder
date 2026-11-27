@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { TRY_URL } from '@/lib/links'
+import { TryCta } from './Buttons'
 import { DownloadCta } from './DownloadCta'
 
 /** Placeholder wordmark until the real Underset logo arrives. */
@@ -33,7 +35,8 @@ export function Nav() {
     >
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:px-12">
         <Wordmark />
-        <div className="flex items-center">
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <TryCta href={TRY_URL} size="sm" />
           <DownloadCta size="sm" />
         </div>
       </nav>
