@@ -214,7 +214,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
       <figure ref={wrapRef} className={`relative m-0 pb-6 ${waveClass}`} aria-label="Example: three DJ sets being scanned for tracks">
         <div className="relative">
           <canvas ref={canvasRef} className="sk-canvas block h-[64px] w-full sm:h-[96px] lg:h-[112px]" aria-hidden />
-          <div className="pointer-events-none absolute inset-x-0 -bottom-6 font-mono text-[0.6875rem] text-dust" aria-hidden>
+          <div className="pointer-events-none absolute inset-x-0 -bottom-6 font-label text-[0.6875rem] text-dust" aria-hidden>
             {spans.map((s) => (
               <span key={s.label} className="absolute" style={{ left: `${s.start * 100}%` }}>
                 {s.label}
@@ -227,8 +227,8 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
       {/* result list */}
       <div className={`border-t border-groove pt-4 ${listClass}`}>
         <div className="mb-2 flex items-baseline justify-between gap-4">
-          <p className="font-mono text-[0.6875rem] tracking-[0.06em] text-dust uppercase">Your list</p>
-          <p className="font-mono text-[0.6875rem] tracking-[0.06em] text-dust tabular-nums uppercase">
+          <p className="font-label text-[0.6875rem] tracking-[0.06em] text-dust uppercase">Your list</p>
+          <p className="font-label text-[0.6875rem] tracking-[0.06em] text-dust tabular-nums uppercase">
             <span className="text-bone">{String(counts.kept).padStart(2, '0')}</span> tracks ·{' '}
             <span className="text-bone">{String(counts.removed).padStart(2, '0')}</span> IDs & repeats out
           </p>
@@ -259,7 +259,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="grid shrink-0 grid-cols-[2.25rem_1fr_auto] items-center gap-3 overflow-hidden border-b border-groove/70 py-2.5 sm:py-3"
                 >
-                  <span className="font-mono text-xs text-dust tabular-nums">
+                  <span className="font-label text-xs text-dust tabular-nums">
                     {filtered ? '—' : String(n).padStart(2, '0')}
                   </span>
                   <span className="min-w-0 truncate text-[0.95rem] sm:text-base">
@@ -275,7 +275,7 @@ export function SignalDeck({ waveClass = '', listClass = '' }: { waveClass?: str
                     )}
                     </span>
                   </span>
-                  <span className={`font-mono text-[0.6875rem] tabular-nums ${filtered ? 'text-acid' : 'text-dust'}`}>
+                  <span className={`font-label text-[0.6875rem] tabular-nums ${filtered ? 'text-acid' : 'text-dust'}`}>
                     {filtered ? (m.kind === 'id' ? 'ID · out' : 'Repeat · out') : `${m.stamp}`}
                   </span>
                 </Motion.li>

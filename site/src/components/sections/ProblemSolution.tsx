@@ -8,7 +8,7 @@ const AFTER = ['One search.', 'Your chosen date range.', 'Clean track results.',
 function ListBlock({ title, items, kind }: { title: string; items: string[]; kind: 'before' | 'after' }) {
   return (
     <div>
-      <h3 className={`plate mb-4 w-fit font-mono text-xs tracking-[0.06em] uppercase ${kind === 'after' ? 'text-acid' : 'text-dust'}`}>
+      <h3 className={`plate mb-4 w-fit font-label text-xs tracking-[0.06em] uppercase ${kind === 'after' ? 'text-acid' : 'text-dust'}`}>
         {title}
       </h3>
       <ul className="flex flex-col">

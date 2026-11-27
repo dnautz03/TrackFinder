@@ -64,7 +64,7 @@ export default function DownloadPage() {
       <main id="main" className="mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-12">
         <section className="grid grid-cols-1 gap-10 pt-14 pb-12 sm:pt-20 lg:grid-cols-12 lg:gap-14 lg:pt-24">
           <div className="lg:col-span-8">
-            <p className="plate mb-6 w-fit font-mono text-[11px] tracking-[0.06em] text-acid uppercase">
+            <p className="plate mb-6 w-fit font-label text-[11px] tracking-[0.06em] text-acid uppercase">
               {started ? `Downloading Underset for ${OS_NAME[started]}` : 'Install guide · Windows & macOS'}
             </p>
             <h1 className="type-display text-[clamp(2.4rem,8.4vw,4.25rem)] uppercase lg:text-[min(4.25rem,4.6vw)]">
@@ -257,7 +257,7 @@ function Step({
   return (
     <li className="grid grid-cols-[2.75rem_1fr] gap-x-4 sm:grid-cols-[3.5rem_1fr] lg:grid-cols-[3.5rem_minmax(0,1fr)_minmax(0,1fr)] lg:gap-x-10">
       <span
-        className={`grid size-11 place-items-center rounded-full border font-mono text-sm font-bold sm:size-14 sm:text-base ${
+        className={`grid size-11 place-items-center rounded-full border font-label text-sm font-bold sm:size-14 sm:text-base ${
           last ? 'border-acid bg-acid text-night' : 'plate border-groove text-acid'
         }`}
         aria-hidden
@@ -275,7 +275,7 @@ function Step({
       </div>
       {mock && (
         <div className="col-span-2 mt-6 sm:col-start-2 sm:col-span-1 lg:col-start-3 lg:mt-0" aria-hidden>
-          <p className="mb-2 font-mono text-[11px] tracking-[0.06em] text-dust uppercase">What you’ll see</p>
+          <p className="mb-2 font-label text-[11px] tracking-[0.06em] text-dust uppercase">What you’ll see</p>
           {mock}
         </div>
       )}

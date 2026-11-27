@@ -180,7 +180,7 @@ function Tracklist({ step }: { step: number }) {
   const kept = ROWS.filter((r, i) => r.kind === 'keep' && step >= ROW_STEP(i)).length
   return (
     <div className="w-full rounded-2xl border border-groove bg-night p-4 sm:p-5">
-      <div className="mb-2 flex items-baseline justify-between font-mono text-[0.6875rem] tracking-[0.06em] text-dust uppercase">
+      <div className="mb-2 flex items-baseline justify-between font-label text-[0.6875rem] tracking-[0.06em] text-dust uppercase">
         <span>Tracklist</span>
         <span className="tabular-nums">
           <span className="text-bone">{String(kept).padStart(2, '0')}</span> tracks
@@ -202,7 +202,7 @@ function Tracklist({ step }: { step: number }) {
                 transition={{ duration: 0.45, ease: EASE }}
                 className="grid grid-cols-[1.6rem_minmax(0,1fr)_auto] items-center gap-2 overflow-hidden border-b border-groove/70 py-2 text-[0.9rem]"
               >
-                <span className="font-mono text-[0.6875rem] text-dust tabular-nums">{filtered ? '—' : String(n).padStart(2, '0')}</span>
+                <span className="font-label text-[0.6875rem] text-dust tabular-nums">{filtered ? '—' : String(n).padStart(2, '0')}</span>
                 <span className="relative min-w-0 truncate">
                   <span className="font-semibold text-bone">{r.artist}</span>
                   <span className="text-dust"> – {r.title}</span>
@@ -214,7 +214,7 @@ function Tracklist({ step }: { step: number }) {
                     />
                   )}
                 </span>
-                <span className={`font-mono text-[0.625rem] tracking-[0.06em] ${filtered && struck ? 'text-acid' : 'text-dust'}`}>
+                <span className={`font-label text-[0.625rem] tracking-[0.06em] ${filtered && struck ? 'text-acid' : 'text-dust'}`}>
                   {filtered && struck ? (r.kind === 'id' ? 'ID · OUT' : 'REPEAT · OUT') : r.month}
                 </span>
               </m.li>
@@ -227,7 +227,7 @@ function Tracklist({ step }: { step: number }) {
 }
 
 function Caption({ children }: { children: string }) {
-  return <p className="mb-4 font-mono text-[0.6875rem] tracking-[0.06em] text-dust uppercase">{children}</p>
+  return <p className="mb-4 font-label text-[0.6875rem] tracking-[0.06em] text-dust uppercase">{children}</p>
 }
 
 export function DjToTracklist() {
