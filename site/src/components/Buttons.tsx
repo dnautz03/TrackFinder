@@ -1,5 +1,5 @@
 import { useRef, type ReactNode, type PointerEvent } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Search } from 'lucide-react'
 
 /** Desktop-only magnetic pull. Does nothing on touch or with reduced motion. */
 export function useMagnet<T extends HTMLElement>(strength = 0.25) {
@@ -76,6 +76,24 @@ export function GhostCta({ href, children }: { href: string; children: ReactNode
     >
       <GithubMark className="size-[1.05em]" />
       {children}
+    </a>
+  )
+}
+
+/** "Try here": opens the live preview (/try/). Hairline pill, like GhostCta, so the download stays the one acid button. */
+export function TryCta({ href, size = 'lg' }: { href: string; size?: 'lg' | 'sm' }) {
+  const m = useMagnet<HTMLAnchorElement>(0.18)
+  const pad = size === 'lg' ? 'h-14 px-6 text-[1.0625rem]' : 'h-10 px-3.5 text-sm sm:px-4'
+  return (
+    <a
+      {...m}
+      href={href}
+      style={{ ['--sweep' as string]: 'rgb(200 255 46 / 0.16)' }}
+      className={`btn-sweep group inline-flex shrink-0 items-center justify-center gap-2 rounded-full whitespace-nowrap border border-groove bg-night font-medium text-bone transition-[transform,border-color,background-color] duration-300 ease-out-expo select-none hover:border-dust hover:bg-deck active:scale-[0.97] ${pad}`}
+    >
+      {/* In the phone nav there is no room for the icon */}
+      <Search aria-hidden className={`size-[1.05em] text-acid ${size === 'sm' ? 'hidden sm:block' : ''}`} strokeWidth={2.25} />
+      Try here
     </a>
   )
 }

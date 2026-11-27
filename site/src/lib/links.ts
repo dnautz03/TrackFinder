@@ -14,3 +14,6 @@ export const HOME_URL = import.meta.env.BASE_URL
 export function guideUrl(os?: Os) {
   return `${HOME_URL}download/${os ? `?os=${os}&start=1` : ''}`
 }
+
+/** The live preview: see a DJ's sets from the phone, no download. */
+export const TRY_URL = `${HOME_URL}try/`

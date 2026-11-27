@@ -26,6 +26,6 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Can I use it on my phone?',
-    a: 'Underset is a desktop app for Windows and macOS. On your phone, send yourself the link and download it on your computer.',
+    a: 'Underset is a desktop app for Windows and macOS. On your phone you can try the live preview: type a DJ and a period to see every set they played and how many tracks are identified. For the track names, send yourself the link and download Underset on your computer.',
   },
 ]

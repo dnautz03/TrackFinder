@@ -51,6 +51,7 @@ All fonts are self-hosted (no Google request) and trimmed with `scripts/fonts.sh
 
 - **PrimaryCta**: acid pill, 56px tall (40px in the nav), arrow ↗ that nudges on hover, presses to 97%. Magnetic on desktop.
 - **GhostCta**: hairline pill with the GitHub mark, `deck` fill on hover.
+- **TryCta** ("Try here"): hairline pill with an acid search icon, next to the download in the nav and between Download and GitHub in the hero. Opens `/try/`. Never acid-filled: the download stays the one primary button.
 - **SendToComputer**: shown only on touch screens. Uses the native share sheet and falls back to copying the link. Collects nothing.
 - **SignalDeck**: Canvas waveform of three example sets, plus the animated list. The data is invented and labelled "Example".
 - **Track row**: index · **Artist** – Title · timestamp. A filtered row gets an acid strike-through, then collapses.
@@ -89,6 +90,10 @@ Rules
 | How it works (`#how-it-works`) | Progress line fills with scroll; each step has a small looping illustration (typing a DJ name, range chips, a playing list). Abstract on purpose — real screenshots go beside them when available |
 | Final CTA | A record spins slowly with light parallax; signal grid behind |
 | Footer | Wordmark, GitHub link, copyright, non-affiliation note |
+
+## Live preview (`/try/`)
+
+Phone-first page. Artist, period chips + two native date fields, the "Include IDs and unreleased" switch, then the DJ's sets: date box, short title, identified bar, link to the set on 1001Tracklists. It ends with the download (or "Send link" on phones), because track names need the desktop app. Data comes from `worker/index.ts` (`/api/artists`, `/api/sets`): search pages only, one request to 1001Tracklists every 8 s for the whole site (a Durable Object queue), cached for an hour, human checks reported and never worked around.
 
 Headings use `WordsReveal`: words rise out of a mask in sequence when scrolled into view.
 
