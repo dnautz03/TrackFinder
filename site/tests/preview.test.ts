@@ -3,7 +3,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { isBlocked, looksReal, parseArtistSearch, parseSearchPages, parseSetSearch } from '../worker/parse.ts'
 import {
-  collectSets, foldName, fmtRange, nameIn, pickArtist, presetFor, presetRange, shortTitle, shouldStop,
+  collectSets, foldName, latestSet, fmtRange, nameIn, pickArtist, presetFor, presetRange, shortTitle, shouldStop,
   titlePerformerPart, type Candidate, type PreviewSet,
 } from '../src/lib/preview.ts'
 
@@ -122,4 +122,16 @@ test('paging stops like the desktop app', () => {
 test('short titles', () => {
   assert.equal(shortTitle('Franky Rizardo - FLOW 682 2026-11-09', 'Franky Rizardo'), 'FLOW 682')
   assert.equal(shortTitle(null, 'X'), 'Untitled set')
+})
+
+test('latest set: the first set the DJ performed, newest first', () => {
+  const pages = [
+    s('x', 'Radio Show - Guest Mix by Franky Rizardo', '2026-11-25'), // only mentions the DJ
+    s('a', 'Franky Rizardo - FLOW 684', '2026-11-23'),
+    s('b', 'Franky Rizardo @ Time Warp', '2026-11-21'),
+  ]
+  assert.equal(latestSet(pages, 'Franky Rizardo', '2026-11-27')?.id, 'a')
+  assert.equal(latestSet(pages.slice(0, 1), 'Franky Rizardo', '2026-11-27'), null)
+  assert.deepEqual(presetRange('latest', '2026-11-27'), ['2005-01-01', '2026-11-27'])
+  assert.equal(presetFor('2005-01-01', '2026-11-27', '2026-11-27'), 'custom') // never picked by dates
 })

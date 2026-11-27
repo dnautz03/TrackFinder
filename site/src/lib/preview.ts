@@ -21,7 +21,11 @@ export interface PreviewSet {
   total: number | null
 }
 
-export type Preset = 'last30' | 'summer' | 'year' | 'custom'
+/** 'latest' = only the DJ's most recent set, whatever its date. */
+export type Preset = 'last30' | 'summer' | 'year' | 'latest' | 'custom'
+
+/** The earliest date the period fields allow (as in the desktop app). */
+export const FIRST_DAY = '2005-01-01'
 
 // ---------------------------------------------------------------- text
 const DASHES = /[‐-―−]/g
@@ -106,6 +110,7 @@ function addDays(day: string, n: number): string {
 
 export function presetRange(key: Exclude<Preset, 'custom'>, today: string): [string, string] {
   const year = Number(today.slice(0, 4))
+  if (key === 'latest') return [FIRST_DAY, today]
   if (key === 'last30') return [addDays(today, -30), today]
   if (key === 'summer') {
     const y = today >= iso(year, 6, 1) ? year : year - 1
@@ -187,4 +192,9 @@ export function collectSets(all: PreviewSet[], artist: string, start: string, en
     else sets.push(s)
   }
   return { sets, skipped }
+}
+
+/** The DJ's most recent set among the result pages read so far (they come newest first). */
+export function latestSet(all: PreviewSet[], artist: string, today: string): PreviewSet | null {
+  return collectSets(all, artist, FIRST_DAY, today).sets[0] ?? null
 }

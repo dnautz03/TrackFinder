@@ -6,7 +6,7 @@ import { primaryClass } from '@/components/Buttons'
 import { Footer } from '@/components/sections/Footer'
 import { HOME_URL } from '@/lib/links'
 import {
-  choices, collectSets, dayBox, fmtDate, fmtRange, pickArtist, presetFor, presetRange, shortTitle, shouldStop, todayIso,
+  choices, collectSets, dayBox, fmtDate, fmtRange, latestSet, pickArtist, presetFor, presetRange, shortTitle, shouldStop, todayIso,
   type Candidate, type Preset, type PreviewSet,
 } from '@/lib/preview'
 
@@ -47,6 +47,7 @@ const PRESETS: { key: Preset; label: string }[] = [
   { key: 'last30', label: 'Last 30 days' },
   { key: 'summer', label: 'This summer' },
   { key: 'year', label: 'This year' },
+  { key: 'latest', label: 'Latest' },
   { key: 'custom', label: 'Custom' },
 ]
 
@@ -54,8 +55,17 @@ type Phase =
   | { kind: 'idle' }
   | { kind: 'looking' }
   | { kind: 'choose'; options: Candidate[] }
-  | { kind: 'searching'; page: number; found: number }
-  | { kind: 'done'; artist: Candidate; start: string; end: string; sets: PreviewSet[]; skipped: number; capped: boolean }
+  | { kind: 'searching'; found: number; latest: boolean }
+  | {
+      kind: 'done'
+      artist: Candidate
+      start: string
+      end: string
+      sets: PreviewSet[]
+      skipped: number
+      capped: boolean
+      latest: boolean
+    }
 
 const n = (x: number) => x.toLocaleString('en-US')
 const plural = (x: number, one: string, many = `${one}s`) => `${n(x)} ${x === 1 ? one : many}`
@@ -119,24 +129,36 @@ export default function TryPage() {
         setArtist(who)
       }
 
+      // "Latest": read result pages (newest first) only until the DJ's own most recent set shows up.
+      const latest = preset === 'latest'
       const all: PreviewSet[] = []
       let capped = false
+      setPhase({ kind: 'searching', found: 0, latest })
       for (let page = 1; ; page++) {
-        setPhase({ kind: 'searching', page, found: collectSets(all, who.name, start, end).sets.length })
         const res = await api<{ sets: PreviewSet[]; current: number; last: number }>(
           `sets?q=${encodeURIComponent(who.name)}&page=${page}`,
           ctrl.signal,
         )
         all.push(...res.sets)
+        if (latest && latestSet(all, who.name, today)) break
+        setPhase({ kind: 'searching', found: collectSets(all, who.name, start, end).sets.length, latest })
         const stop = shouldStop(res.sets, res.current, res.last, start, page)
         if (stop) {
-          capped = stop === 'cap'
+          capped = stop === 'cap' && !latest
           break
         }
       }
-      const { sets, skipped } = collectSets(all, who.name, start, end)
-      setPhase({ kind: 'done', artist: who, start, end, sets, skipped, capped })
-      requestAnimationFrame(() => resultsRef.current?.focus())
+      const newest = latest ? latestSet(all, who.name, today) : null
+      const { sets, skipped } = latest ? { sets: newest ? [newest] : [], skipped: 0 } : collectSets(all, who.name, start, end)
+      setPhase({ kind: 'done', artist: who, start, end, sets, skipped, capped, latest })
+      // Bring the results into view (the form fills the phone screen), then move focus there
+      requestAnimationFrame(() => {
+        const el = resultsRef.current
+        if (!el) return
+        const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        el.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' })
+        el.focus({ preventScroll: true })
+      })
     } catch (e) {
       if ((e as DOMException)?.name === 'AbortError') return
       setPhase({ kind: 'idle' })
@@ -146,6 +168,8 @@ export default function TryPage() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
+    // Close the phone keyboard so the progress and results are visible
+    ;(document.activeElement as HTMLElement | null)?.blur()
     if (!busy) search(artist)
   }
 
@@ -220,7 +244,8 @@ export default function TryPage() {
                     <button
                       key={c.id}
                       type="button"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.currentTarget.blur()
                         setArtist(c)
                         setName(c.name)
                         search(c)
@@ -246,7 +271,7 @@ export default function TryPage() {
                     type="button"
                     aria-pressed={preset === p.key}
                     onClick={() => choosePreset(p.key)}
-                    className={`min-h-11 rounded-full border px-4 font-label text-sm transition-colors ${
+                    className={`min-h-11 touch-manipulation rounded-full border px-4 font-label text-sm transition-colors ${
                       preset === p.key ? 'border-acid bg-acid font-bold text-night' : 'border-groove text-bone hover:border-dust'
                     }`}
                   >
@@ -254,25 +279,37 @@ export default function TryPage() {
                   </button>
                 ))}
               </div>
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                <DateField label="From" value={start} min="2005-01-01" max={today} onChange={(v) => setDate(0, v)} />
-                <DateField label="To" value={end} min="2005-01-01" max={today} onChange={(v) => setDate(1, v)} />
-              </div>
+              {preset === 'latest' ? (
+                <p className="mt-3 flex min-h-[4.75rem] items-center rounded-xl border border-dashed border-groove px-4 font-label text-sm text-dust">
+                  Only the most recent set this DJ played, whatever its date.
+                </p>
+              ) : (
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <DateField label="From" value={start} min="2005-01-01" max={today} onChange={(v) => setDate(0, v)} />
+                  <DateField label="To" value={end} min="2005-01-01" max={today} onChange={(v) => setDate(1, v)} />
+                </div>
+              )}
             </fieldset>
 
-            <div className="mt-6 flex items-center justify-between gap-4 rounded-xl border border-groove px-4 py-3">
-              <div>
-                <p id="ids-label" className="font-label text-sm text-bone">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={includeIds}
+              aria-labelledby="ids-label"
+              aria-describedby="ids-detail"
+              onClick={() => setIncludeIds((v) => !v)}
+              className="mt-6 flex w-full touch-manipulation items-center justify-between gap-4 rounded-xl border border-groove px-4 py-3 text-left transition-colors hover:border-dust"
+            >
+              <span>
+                <span id="ids-label" className="block font-label text-sm text-bone">
                   Include IDs and unreleased
-                </p>
-                <p className="font-label text-xs text-dust">Count entries marked ID or (Unreleased) too</p>
-              </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={includeIds}
-                aria-labelledby="ids-label"
-                onClick={() => setIncludeIds((v) => !v)}
+                </span>
+                <span id="ids-detail" className="block font-label text-xs text-dust">
+                  Count entries marked ID or (Unreleased) too
+                </span>
+              </span>
+              <span
+                aria-hidden
                 className={`relative h-7 w-12 shrink-0 rounded-full border transition-colors ${includeIds ? 'border-acid bg-acid' : 'border-groove bg-deck'}`}
               >
                 <span
@@ -280,8 +317,8 @@ export default function TryPage() {
                     includeIds ? 'left-6 bg-night' : 'left-1 bg-dust'
                   }`}
                 />
-              </button>
-            </div>
+              </span>
+            </button>
 
             <button type="submit" disabled={busy} className={`mt-6 w-full disabled:opacity-70 ${primaryClass('lg')}`}>
               {busy ? (
@@ -296,6 +333,10 @@ export default function TryPage() {
                 </>
               )}
             </button>
+            <p className="mt-3 min-h-5 text-center font-label text-sm text-dust tabular-nums" aria-live="polite">
+              {phase.kind === 'searching' && !phase.latest && (phase.found ? `${plural(phase.found, 'set')} so far` : 'Finding sets…')}
+              {phase.kind === 'searching' && phase.latest && 'Finding the latest set…'}
+            </p>
           </form>
         </section>
 
@@ -331,7 +372,7 @@ function DateField(props: { label: string; value: string; min: string; max: stri
         min={props.min}
         max={props.max}
         onChange={(e) => props.onChange(e.target.value)}
-        className="mt-1 h-12 w-full rounded-xl border border-groove bg-deck px-3 font-label text-sm text-bone [color-scheme:dark] outline-none hover:border-dust focus:border-acid"
+        className="mt-1 h-12 w-full rounded-xl border border-groove bg-deck appearance-none px-3 font-label text-base text-bone [color-scheme:dark] outline-none hover:border-dust focus:border-acid"
       />
     </label>
   )
@@ -345,16 +386,17 @@ function Results(props: {
   sets: PreviewSet[]
   skipped: number
   capped: boolean
+  latest: boolean
   includeIds: boolean
   onRetry: () => void
 }) {
-  const { artist, sets, includeIds } = props
+  const { artist, sets, includeIds, latest } = props
   const tracks = sets.reduce((sum, s) => sum + ((includeIds ? s.total : s.ided) ?? 0), 0)
 
   return (
     <section ref={props.ref} tabIndex={-1} aria-labelledby="results-title" className="border-t border-groove pt-12 pb-20 outline-none sm:pt-16">
       <p className="plate w-fit font-label text-xs tracking-[0.06em] text-dust uppercase">
-        {artist.name} · {fmtRange(props.start, props.end)}
+        {artist.name} · {latest ? 'Latest set' : fmtRange(props.start, props.end)}
       </p>
 
       {sets.length === 0 ? (
@@ -363,7 +405,9 @@ function Results(props: {
             No sets found
           </h2>
           <p className="plate mt-4 max-w-[52ch] text-dust">
-            1001Tracklists lists no sets by {artist.name} in this period. Try a longer period.
+            {latest
+              ? `1001Tracklists lists no sets by ${artist.name} yet.`
+              : `1001Tracklists lists no sets by ${artist.name} in this period. Try a longer period.`}
           </p>
           <button type="button" onClick={props.onRetry} className="mt-6 inline-flex min-h-11 items-center gap-2 text-bone underline decoration-groove underline-offset-4 hover:decoration-acid">
             Try another search
@@ -374,22 +418,23 @@ function Results(props: {
           <div className="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-7">
               <h2 id="results-title" className="plate type-display w-fit text-[clamp(2.2rem,8vw,4rem)] uppercase">
-                {plural(sets.length, 'set')}
+                {latest ? (sets[0].date ? fmtDate(sets[0].date) : 'Latest set') : plural(sets.length, 'set')}
               </h2>
               <p className="plate mt-3 w-fit text-[1.25rem] text-bone sm:text-[1.5rem]">
                 up to <span className="font-semibold text-acid">{n(tracks)}</span> {includeIds ? 'tracks' : 'identified tracks'}
               </p>
               <p className="plate mt-3 max-w-[52ch] font-label text-sm text-dust">
                 {includeIds ? 'IDs included. ' : 'IDs and unreleased left out. '}
-                Counted per set, before repeats are merged, so the clean list is shorter.
+                {latest ? 'Counted from its tracklist.' : 'Counted per set, before repeats are merged, so the clean list is shorter.'}
               </p>
             </div>
             <aside className="lg:col-span-5">
               <div className="plate rounded-2xl border border-groove p-6">
                 <p className="font-semibold text-bone">See every track name</p>
                 <p className="mt-2 font-label text-sm text-dust">
-                  Underset on your computer reads each of these sets and gives you one clean list, without IDs or repeats,
-                  with Spotify and SoundCloud links.
+                  {latest
+                    ? 'Underset on your computer reads this set and gives you its clean list, without IDs or repeats, with Spotify and SoundCloud links.'
+                    : 'Underset on your computer reads each of these sets and gives you one clean list, without IDs or repeats, with Spotify and SoundCloud links.'}
                 </p>
                 <div className="mt-5 flex flex-col gap-3">
                   <DownloadCta size="sm" />
