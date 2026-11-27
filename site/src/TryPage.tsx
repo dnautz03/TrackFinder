@@ -154,7 +154,7 @@ export default function TryPage() {
       <header className="border-b border-groove bg-night">
         <nav aria-label="Main" className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:px-12">
           <Wordmark href={HOME_URL} />
-          <a href={HOME_URL} className="inline-flex min-h-11 items-center gap-2 text-sm text-dust transition-colors hover:text-bone">
+          <a href={HOME_URL} className="inline-flex min-h-11 items-center gap-2 font-label text-sm text-dust transition-colors hover:text-bone">
             <ArrowLeft className="size-4" aria-hidden />
             Back to site
           </a>
@@ -164,9 +164,6 @@ export default function TryPage() {
       <main id="main" className="mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-12">
         <section className="grid grid-cols-1 gap-10 pt-12 pb-16 sm:pt-20 lg:grid-cols-12 lg:gap-14 lg:pt-24">
           <div className="lg:col-span-5">
-            <p className="plate mb-6 w-fit font-label text-[11px] tracking-[0.06em] text-acid uppercase">
-              Live preview · from 1001Tracklists
-            </p>
             <h1 className="type-display text-[clamp(2.4rem,9vw,4.25rem)] uppercase lg:text-[min(4.25rem,4.6vw)]">
               <span className="plate">Which sets did</span>
               <br />
@@ -203,7 +200,7 @@ export default function TryPage() {
                 placeholder="e.g. Franky Rizardo"
               />
             </div>
-            <div id="artist-status" aria-live="polite" className="min-h-6 pt-2 text-sm">
+            <div id="artist-status" aria-live="polite" className="min-h-6 pt-2 font-label text-sm">
               {phase.kind === 'looking' && <Status icon="spin">Looking up {name.trim()}…</Status>}
               {artist && phase.kind !== 'looking' && (
                 <Status icon="check">
@@ -217,7 +214,7 @@ export default function TryPage() {
 
             {phase.kind === 'choose' && (
               <div className="mt-2">
-                <p className="text-sm text-bone">Several artists match. Which one did you mean?</p>
+                <p className="font-label text-sm text-bone">Several artists match. Which one did you mean?</p>
                 <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {phase.options.map((c) => (
                     <button
@@ -231,7 +228,7 @@ export default function TryPage() {
                       className="rounded-xl border border-groove bg-deck px-4 py-3 text-left transition-colors hover:border-dust"
                     >
                       <span className="block font-semibold text-bone">{c.name}</span>
-                      <span className="block text-sm text-dust">
+                      <span className="block font-label text-sm text-dust">
                         {[c.country, c.tracklists ? `${n(c.tracklists)} tracklists` : 'no tracklists'].filter(Boolean).join(' · ')}
                       </span>
                     </button>
@@ -249,8 +246,8 @@ export default function TryPage() {
                     type="button"
                     aria-pressed={preset === p.key}
                     onClick={() => choosePreset(p.key)}
-                    className={`min-h-11 rounded-full border px-4 text-[0.9375rem] transition-colors ${
-                      preset === p.key ? 'border-acid bg-acid font-semibold text-night' : 'border-groove text-bone hover:border-dust'
+                    className={`min-h-11 rounded-full border px-4 font-label text-sm transition-colors ${
+                      preset === p.key ? 'border-acid bg-acid font-bold text-night' : 'border-groove text-bone hover:border-dust'
                     }`}
                   >
                     {p.label}
@@ -265,10 +262,10 @@ export default function TryPage() {
 
             <div className="mt-6 flex items-center justify-between gap-4 rounded-xl border border-groove px-4 py-3">
               <div>
-                <p id="ids-label" className="text-[0.9375rem] font-medium text-bone">
+                <p id="ids-label" className="font-label text-sm text-bone">
                   Include IDs and unreleased
                 </p>
-                <p className="text-sm text-dust">Count entries marked ID or (Unreleased) too</p>
+                <p className="font-label text-xs text-dust">Count entries marked ID or (Unreleased) too</p>
               </div>
               <button
                 type="button"
@@ -299,12 +296,6 @@ export default function TryPage() {
                 </>
               )}
             </button>
-            {phase.kind === 'searching' && (
-              <p className="mt-3 text-center font-mono text-xs text-dust" aria-live="polite">
-                Searching 1001Tracklists · page {phase.page}
-                {phase.found ? ` · ${plural(phase.found, 'set')} so far` : ''} · one page every 8 seconds
-              </p>
-            )}
           </form>
         </section>
 
@@ -333,14 +324,14 @@ function Status({ icon, children }: { icon: 'spin' | 'check' | 'alert'; children
 function DateField(props: { label: string; value: string; min: string; max: string; onChange: (v: string) => void }) {
   return (
     <label className="block">
-      <span className="text-sm text-dust">{props.label}</span>
+      <span className="font-label text-sm text-dust">{props.label}</span>
       <input
         type="date"
         value={props.value}
         min={props.min}
         max={props.max}
         onChange={(e) => props.onChange(e.target.value)}
-        className="mt-1 h-12 w-full rounded-xl border border-groove bg-deck px-3 font-mono text-sm text-bone [color-scheme:dark] outline-none hover:border-dust focus:border-acid"
+        className="mt-1 h-12 w-full rounded-xl border border-groove bg-deck px-3 font-label text-sm text-bone [color-scheme:dark] outline-none hover:border-dust focus:border-acid"
       />
     </label>
   )
@@ -362,7 +353,7 @@ function Results(props: {
 
   return (
     <section ref={props.ref} tabIndex={-1} aria-labelledby="results-title" className="border-t border-groove pt-12 pb-20 outline-none sm:pt-16">
-      <p className="plate w-fit font-mono text-xs tracking-[0.06em] text-dust uppercase">
+      <p className="plate w-fit font-label text-xs tracking-[0.06em] text-dust uppercase">
         {artist.name} · {fmtRange(props.start, props.end)}
       </p>
 
@@ -388,7 +379,7 @@ function Results(props: {
               <p className="plate mt-3 w-fit text-[1.25rem] text-bone sm:text-[1.5rem]">
                 up to <span className="font-semibold text-acid">{n(tracks)}</span> {includeIds ? 'tracks' : 'identified tracks'}
               </p>
-              <p className="plate mt-3 max-w-[52ch] text-[0.9375rem] text-dust">
+              <p className="plate mt-3 max-w-[52ch] font-label text-sm text-dust">
                 {includeIds ? 'IDs included. ' : 'IDs and unreleased left out. '}
                 Counted per set, before repeats are merged, so the clean list is shorter.
               </p>
@@ -396,7 +387,7 @@ function Results(props: {
             <aside className="lg:col-span-5">
               <div className="plate rounded-2xl border border-groove p-6">
                 <p className="font-semibold text-bone">See every track name</p>
-                <p className="mt-2 text-[0.9375rem] text-dust">
+                <p className="mt-2 font-label text-sm text-dust">
                   Underset on your computer reads each of these sets and gives you one clean list, without IDs or repeats,
                   with Spotify and SoundCloud links.
                 </p>
@@ -412,14 +403,13 @@ function Results(props: {
               <SetRow key={s.id || s.url} set={s} artist={artist.name} />
             ))}
           </ol>
-          <div className="mt-6 space-y-2 text-sm text-dust">
+          <div className="mt-6 space-y-2 font-label text-sm text-dust">
             {props.capped && <p>Stopped after the first 300 sets; pick a shorter period to see older ones.</p>}
             {props.skipped > 0 && (
               <p>
                 {plural(props.skipped, 'set')} by other DJs (or only mentioning {artist.name}) {props.skipped === 1 ? 'was' : 'were'} skipped.
               </p>
             )}
-            <p>Counts come from the tracklists on 1001Tracklists. Underset is not affiliated with 1001Tracklists.</p>
           </div>
         </>
       )}
@@ -440,7 +430,7 @@ function SetRow({ set, artist }: { set: PreviewSet; artist: string }) {
         className="group grid grid-cols-[3.25rem_1fr_auto] items-center gap-4 py-4 transition-colors hover:bg-deck sm:px-3"
         aria-label={`${shortTitle(set.title, artist)}, ${fmtDate(set.date)}, on 1001Tracklists`}
       >
-        <span className="flex h-13 flex-col items-center justify-center rounded-lg border border-groove bg-night font-mono">
+        <span className="flex h-13 flex-col items-center justify-center rounded-lg border border-groove bg-night font-label">
           <span className="text-lg leading-none font-bold text-bone">{box.day}</span>
           <span className="mt-1 text-[10px] tracking-[0.06em] text-dust">{box.month}</span>
         </span>
@@ -451,12 +441,12 @@ function SetRow({ set, artist }: { set: PreviewSet; artist: string }) {
               <span className="h-1.5 w-full max-w-40 overflow-hidden rounded-full bg-groove" aria-hidden>
                 <span className="block h-full rounded-full bg-acid" style={{ width: `${Math.round((ided / total) * 100)}%` }} />
               </span>
-              <span className="shrink-0 font-mono text-xs text-dust">
+              <span className="shrink-0 font-label text-xs text-dust tabular-nums">
                 {ided} of {total} identified
               </span>
             </span>
           ) : (
-            <span className="mt-1 block font-mono text-xs text-dust">No tracklist yet</span>
+            <span className="mt-1 block font-label text-xs text-dust">No tracklist yet</span>
           )}
         </span>
         <ArrowUpRight className="size-4 text-dust transition-colors group-hover:text-acid" aria-hidden />
