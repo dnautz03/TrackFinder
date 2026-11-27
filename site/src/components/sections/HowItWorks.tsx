@@ -145,7 +145,7 @@ function Discover({ active }: { active: boolean }) {
     <ul className="w-full">
       {FOUND.map(([a, t], k) => (
         <li key={a} className="flex items-center gap-3 border-b border-groove py-2.5 last:border-0">
-          <span className="w-5 font-mono text-[0.6875rem] text-dust">{String(k + 1).padStart(2, '0')}</span>
+          <span className="w-5 font-label text-[0.6875rem] text-dust">{String(k + 1).padStart(2, '0')}</span>
           <span className="min-w-0 flex-1 truncate text-[0.95rem]">
             <span className="font-semibold text-bone">{a}</span>
             <span className="text-dust"> – {t}</span>

@@ -12,3 +12,6 @@ fonttools varLib.instancer $F/jetbrains-mono/files/jetbrains-mono-latin-wght-nor
 for n in archivo instrument mono; do
   fonttools subset $T/$n.ttf --unicodes="$UNI" --layout-features='*' --flavor=woff2 --output-file=src/fonts/$n.woff2
 done
+for w in 400 700; do
+  fonttools subset node_modules/@fontsource/poppins/files/poppins-latin-$w-normal.woff2 --unicodes="$UNI" --layout-features='*' --flavor=woff2 --output-file=src/fonts/poppins-$w.woff2
+done

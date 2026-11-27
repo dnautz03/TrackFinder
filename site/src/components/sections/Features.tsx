@@ -56,7 +56,7 @@ export function Features() {
                 aria-hidden
                 className="pointer-events-none absolute inset-0 -z-10 origin-left scale-x-0 bg-deck transition-transform duration-500 ease-out-expo group-hover:scale-x-100"
               />
-              <span className="plate w-fit font-mono text-xs text-dust tabular-nums transition-colors group-hover:text-acid">
+              <span className="plate w-fit font-label text-xs text-dust tabular-nums transition-colors group-hover:text-acid">
                 {String(i + 1).padStart(2, '0')}
                 <span className="hidden sm:inline"> · {f.stamp}</span>
               </span>

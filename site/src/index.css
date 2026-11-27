@@ -25,6 +25,21 @@
   font-weight: 400 700;
   src: url('./fonts/mono.woff2') format('woff2-variations');
 }
+/* Poppins: small labels and captions (400 + 700) */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/poppins-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('./fonts/poppins-700.woff2') format('woff2');
+}
 
 /* ───────── Design tokens — Underground Signal ───────── */
 @theme {
@@ -38,6 +53,7 @@
 
   --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, sans-serif;
   --font-sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-label: 'Poppins', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -299,7 +315,7 @@
 }
 .mix-hint,
 .mix-hint * {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-stretch: 100%;
   letter-spacing: 0.04em;
   text-transform: none;
@@ -450,7 +466,7 @@
 }
 
 .story-month {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
   letter-spacing: 0.06em;
   fill: #5c6253;
@@ -501,8 +517,15 @@ html[data-platform='windows'] .cta-windows,
 html[data-platform='mac'] .cta-mac,
 html[data-platform='mobile'] .cta-mobile { display: inline-flex !important; }
 
-/* FAQ answer eases in when a question opens */
-.faq[open] .faq-answer { animation: fadeUp 450ms var(--ease-out-expo) both; }
+/* FAQ: the + turns into × as soon as a question is toggled (JS sets
+   data-expanded right away; without JS we follow the native [open]) */
+.faq:not([data-expanded])[open] .faq-icon,
+.faq[data-expanded='true'] .faq-icon {
+  transform: rotate(45deg);
+  border-color: var(--color-acid);
+  background-color: var(--color-acid);
+  color: var(--color-night);
+}
 
 /* Loading skeletons: shown only before JavaScript is ready */
 .sk {
